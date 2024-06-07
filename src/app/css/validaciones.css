@@ -1,0 +1,8 @@
+.textValid{
+    display: none;
+}
+.textInvalid{
+    display: block;
+    color: red;
+    font-size: 9pt
+}

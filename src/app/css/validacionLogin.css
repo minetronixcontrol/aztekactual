@@ -1,0 +1,8 @@
+.textValidLoggin{
+    display: none;
+}
+.textInvalidLoggin{
+    display: block;
+    color: white;
+    font-size: 9pt
+}

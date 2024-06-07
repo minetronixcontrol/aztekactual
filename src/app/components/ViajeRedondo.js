@@ -1,0 +1,10366 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactWizard from "react-bootstrap-wizard";
+import {Redirect} from 'react-router-dom';
+
+import { Button, Badge, Container, Col, CustomInput, Card, CardTitle, CardText, Form, FormGroup, FormText, Input, InputGroupAddon, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from "reactstrap";
+import Select from 'react-select';
+import AsyncSelect from 'react-select/lib/Async';
+
+import GenerarBoleto from "./boletoPDF";
+import WizardCliente from "./TabNewCliente.js";
+
+ReactWizard.defaultProps = {
+    previousButtonText: "Atrás",
+    finishButtonText: "Guardar",
+    nextButtonText: "Siguiente",
+    progressbar: true
+};
+
+
+var generalData = {
+    folio: null,
+    costoBoleto: 0, //Precio en Dollar
+    precioDollar: 0, 
+    idioma: 'espanol',
+    noAsientos: 0,
+    asientosSelected: {
+        selected1: false,
+        selected2: false,
+        selected3: false,
+        selected4: false,
+        selected5: false,
+        selected6: false,
+        selected7: false,
+        selected8: false,
+        selected9: false,
+        selected10: false,
+        selected11: false,
+        selected12: false,
+        selected13: false,
+        selected14: false,
+        selected15: false,
+        selected16: false,
+        selected17: false,
+        selected18: false,
+        selected19: false,
+        selected20: false,
+        selected21: false,
+        selected22: false,
+        selected23: false,
+        selected24: false,
+        selected25: false,
+        selected26: false,
+        selected27: false,
+        selected28: false,
+        selected29: false,
+        selected30: false,
+        selected31: false,
+        selected32: false,
+        selected33: false,
+        selected34: false,
+        selected35: false,
+        selected36: false,
+        selected37: false,
+        selected38: false,
+        selected39: false,
+        selected40: false,
+        selected41: false,
+        selected42: false,
+    },
+    origen: {
+        id: null,
+        direccion: null,
+        ciudad: null,
+        estado: null,
+        pais: null
+    },
+    destino: {
+        id: null,
+        direccion: null,
+        ciudad: null,
+        estado: null,
+        pais: null
+    },
+    //fechahora: null,
+    cliente: null,
+    nombreCliente: null,
+    clienteTipo: null,
+    razon: null,
+    cambio: 'US',
+    //total: '100',
+    descuento: {
+        idDescuento: null,
+        tipo: 'Ninguno',
+        porc: 0
+    },
+    cobro: {
+        subtotal: 0,
+        descuento: 0,
+        cortesia: 0,
+        iva: 0,
+        total: 0
+    },
+    detalles:{
+        fechaAbierta: false,
+        dia: null,
+        hora: '04:15',
+        anio: null,
+        diaDelAnio:  null,
+        idViaje: null,
+        numeroEconomico: null,
+        noAsiento: null,
+        corrida: null,
+        
+    },
+    vendedor:{
+        id_Usuario: null,
+        username: null,
+        nombre: null,
+        apellidoPaterno: null,
+        apellidoMaterno: null,
+        sucursal: null,
+        seguridad: null,
+        tipoDescuento: null
+    },
+    sucursalVendedor: {
+        nombre: null,
+        direccion: null,
+        tel: null,
+        tel2: null,
+        correo: null
+    },
+    noPasajeros: 0,
+};
+
+var generalDataR = {
+  folio: null,
+  costoBoleto: 0, //Precio en Dollar
+  precioDollar: 0, 
+  idioma: 'espanol',
+  noAsientos: 0,
+  asientosSelected: {
+      selected1: false,
+      selected2: false,
+      selected3: false,
+      selected4: false,
+      selected5: false,
+      selected6: false,
+      selected7: false,
+      selected8: false,
+      selected9: false,
+      selected10: false,
+      selected11: false,
+      selected12: false,
+      selected13: false,
+      selected14: false,
+      selected15: false,
+      selected16: false,
+      selected17: false,
+      selected18: false,
+      selected19: false,
+      selected20: false,
+      selected21: false,
+      selected22: false,
+      selected23: false,
+      selected24: false,
+      selected25: false,
+      selected26: false,
+      selected27: false,
+      selected28: false,
+      selected29: false,
+      selected30: false,
+      selected31: false,
+      selected32: false,
+      selected33: false,
+      selected34: false,
+      selected35: false,
+      selected36: false,
+      selected37: false,
+      selected38: false,
+      selected39: false,
+      selected40: false,
+      selected41: false,
+      selected42: false,
+  },
+  origen: {
+      id: null,
+      direccion: null,
+      ciudad: null,
+      estado: null,
+      pais: null
+  },
+  destino: {
+      id: null,
+      direccion: null,
+      ciudad: null,
+      estado: null,
+      pais: null
+  },
+  //fechahora: null,
+  cliente: null,
+  nombreCliente: null,
+  clienteTipo: null,
+  razon: null,
+  cambio: 'US',
+  //total: '100',
+  descuento: {
+      idDescuento: null,
+      tipo: 'Ninguno',
+      porc: 0
+  },
+  cobro: {
+      subtotal: 0,
+      descuento: 0,
+      cortesia: 0,
+      iva: 0,
+      total: 0
+  },
+  detalles:{
+      fechaAbierta: false,
+      dia: null,
+      hora: '04:15',
+      anio: null,
+      diaDelAnio:  null,
+      idViaje: null,
+      numeroEconomico: null,
+      noAsiento: null,
+      corrida: null,
+      
+  },
+  vendedor:{
+      id_Usuario: null,
+      username: null,
+      nombre: null,
+      apellidoPaterno: null,
+      apellidoMaterno: null,
+      sucursal: null,
+      seguridad: null,
+      tipoDescuento: null
+  },
+  sucursalVendedor: {
+      nombre: null,
+      direccion: null,
+      tel: null,
+      tel2: null,
+      correo: null
+  },
+  noPasajeros: 0,
+};
+
+var tipoDeViaje = "Normal";
+
+var vistaPrevia = {
+    vendedor: 'Jane Doe',
+    sucursal: 'Viajes Azteca',
+    pasajero: 'John Doe',
+    tipo: 'Adulto',
+    origen: 'Tlaltenango',
+    fecha: '00-00-0000',
+    hora: '00:00 --',
+    destino: 'Pacoima',
+    tipoDeCambio: 'MX',
+    subtotal: '0.00',
+    descuento: '0.00',
+    total: '0.00',
+    noAsiento: '0',
+    telSucursal: '4931234567',
+    tel2Sucursal: '4931234567',
+    correoSucursal: 'example@correo.com',
+    dirSucursal: 'nowhere',
+    idioma: 'espanol',
+    imagenPublicidad: 'data:image/jpeg;base64,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',
+    folio: '000',
+    direccionMatriz: 'nowhere',
+    telefonoMatriz: '4931234567',
+    direccionMatrizEU: 'nowhere',
+    telefonoMatrizEU: '4931234567',
+    frase: 'hola',
+    permiso: 'hola',
+    politicas: 'AA',
+}
+
+//FISRT STEP VARS
+var optOrigen = [];
+var optFechaHora = [];
+//ENDS FISRT STEP VARS
+
+//THIRD STEP VARS
+var optCliente = [];
+var props = [];
+var propsR = [];
+var asientos = [];
+var asientosR = [];
+var optRazon = [
+    { value: 'Ciudadano', label: 'Ciudadano' },
+    { value: 'Residente', label: 'Residente' },
+    { value: 'Turista', label: 'Turista' }
+];
+var clientes = [];
+var pasajeros = [];
+var pasajerosR = [];
+var razones = [];
+var razonesR = [];
+var descuentos = [];
+var descuentosR = [];
+var tiposClientes = [];
+var descuentosLabel = [];
+var descuentosLabelR = [];
+//ENDS THIRD STEP VARS
+
+class FirstStep extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            //Variables de validacion
+            validationOrigen: true,
+            validationDestino: true,
+            validationFechaHora: true,
+            validationCorrida: true,
+            validationTipoViaje: true,
+            //Otras Variables
+            optOrigen: [],
+            optDestino: [],
+            optFechaHora: [],
+            optCorridas: [],
+            optTipoViaje: [],
+            hora: '00:00',
+        }
+        //Setters
+        this.handleSetOptionsOrigen = this.handleSetOptionsOrigen.bind(this);
+        this.handleSetOptionsDestino = this.handleSetOptionsDestino.bind(this);
+        /////////
+        this.handleChangeOrigen = this.handleChangeOrigen.bind(this);
+        this.handleChangeDestino = this.handleChangeDestino.bind(this);
+        this.handleChangeFechaHora = this.handleChangeFechaHora.bind(this);
+        this.handleChangeCorrida = this.handleChangeCorrida.bind(this);
+        /////////
+        this.getDiaDelAnio = this.getDiaDelAnio.bind(this);
+
+    }
+
+    isValidated() {
+        if(generalData.origen.id == null){
+            this.setState({
+              validationOrigen: false
+            })
+        }
+
+        if(generalData.destino.id == null){
+            this.setState({
+              validationDestino: false
+            })
+        }
+
+        if(generalData.detalles.idViaje == null){
+            this.setState({
+                validationCorrida: false
+            })
+        }
+
+
+        if(generalData.origen.id == null || generalData.destino.id == null || generalData.detalles.dia == null || generalData.detalles.idViaje == null || !this.state.validationFechaHora){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    componentDidMount(){
+        console.log('tipoDeViaje', tipoDeViaje);
+        this.handleSetOptionsOrigen();
+        this.setState({
+            optTipoViaje: [
+                { value: 'Normal', label: 'Normal'},
+                { value: 'Familiar', label: 'Familiar'},
+            ]
+        })
+    }    
+
+    //Setters
+    handleSetOptionsOrigen(){
+        fetch('/api/OrigenesYdestinos/')
+        .then(res => res.json())
+        .then(data => {
+            if(data.length > 0){
+                for(let i = 0; i < data.length; i++){
+                    optOrigen[i] = { 
+                        value: data[i]._id,
+                        label: data[i].municipio,
+                        estado: data[i].estado,
+                        pais: data[i].pais,
+                        direccion: data[i].direccion,
+                        hora: data[i].horaDeCita
+                    };
+                }
+                this.setState({
+                    optOrigen: optOrigen
+                })
+            }
+        });
+    }
+
+    ///////////
+
+    handleChangeCorrida(e){
+        generalData.detalles.idViaje =  e.value;
+        generalData.detalles.dia = e.dia;
+        generalData.detalles.numeroEconomico = e.numeroEconomico;
+        generalData.detalles.anio = e.anio;
+        generalData.detalles.diaDelAnio = e.diaDelAnio;
+        this.setState({
+            validationCorrida: true,
+        });
+    }
+
+    handleChangeOrigen(e){
+        //console.log(e);
+        generalData.origen.id = e.value;
+        generalData.origen.ciudad = e.label;
+        generalData.origen.estado = e.estado;
+        generalData.origen.pais = e.pais;
+        generalData.origen.direccion = e.direccion;
+        generalData.detalles.hora = e.hora;
+        this.setState({
+            validationOrigen: true,
+            hora: e.hora
+        });
+        //console.log(generalData.origen.id);
+        let pais = (e.pais == 'MX')? 'US' : 'MX';
+        //this.handleSetOptionsDestino(pais);
+        this.handleSetOptionsDestino(e.value);
+    }
+
+    handleSetOptionsDestino(idOrigen){
+        //Sacamos los destinos que estén guardados en los precios para ese origen
+        //console.log(idOrigen);
+        fetch(`/api/Precios/destinos/${idOrigen}`)
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                optDestino: data
+            })
+        });
+    }
+
+    handleChangeDestino(e){
+        generalData.destino.id = e.value;
+        generalData.destino.ciudad = e.label;
+        generalData.destino.estado = e.estado;
+        generalData.destino.pais = e.pais;
+        generalData.destino.direccion = e.direccion;
+        this.setState({
+          validationDestino: true
+        })
+        //console.log(generalData.destino.id);
+    }
+
+    handleChangeFechaHora(e){
+
+        let selectFechaHora = document.getElementById('selectFechaHora');
+
+        let fechaDeViaje = e.target.value;             
+        let arrayFechaDeViaje = fechaDeViaje.split('-', 3);
+        let anioFechaDeViaje = arrayFechaDeViaje[0];
+
+        let hoy = new Date();
+        let anio = hoy.getFullYear();
+
+        let diaDeHoy = `${anio}-${hoy.getMonth()+1}-${hoy.getDate()}`;
+        let diaAnioHoy = this.getDiaDelAnio(`${anio}-01-01`,diaDeHoy);
+
+        //console.log('diaAnioHoy', diaAnioHoy);
+
+        let diaAnioViaje = this.getDiaDelAnio(`${anioFechaDeViaje}-01-01`,fechaDeViaje);
+
+        //console.log('diaAnioViaje', diaAnioViaje);
+
+        if((anioFechaDeViaje < anio) || ((anioFechaDeViaje == anio) && (diaAnioViaje<diaAnioHoy))){//si el anio que seleccionamos es menor al año actual, retornamos false
+            this.setState({
+                validationFechaHora: false,
+            });
+            selectFechaHora.value = '';
+            return false;
+        }else{
+            //Ahora verificamos que ya esté abierta la fecha
+            //El formato de la fecha debe ser "dd-mm-aaaa"
+            let buscarFecha = `${arrayFechaDeViaje[2]}-${arrayFechaDeViaje[1]}-${arrayFechaDeViaje[0]}`;
+            fetch(`/api/AsignarViajes/${generalData.origen.id}/${generalData.destino.id}/${buscarFecha}`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.length > 0){
+                    this.setState({
+                        optCorridas: data,
+                        validationFechaHora: true,
+                    });
+                }else{
+                    this.setState({
+                        validationFechaHora: false,
+                    });
+                    selectFechaHora.value = '';
+                    alert('No hay viaje que coincida, escoge otra fecha o contáctate con la matriz');
+                }
+            });
+        }
+    }
+
+    getDiaDelAnio(fechaInicial, fechaFinal){
+
+        let fechaini = new Date(fechaInicial);
+        let fechafin = new Date(fechaFinal);
+        let diasdif= fechafin.getTime()-fechaini.getTime();
+        let contdias = Math.round(diasdif/(1000*60*60*24));
+
+        return (contdias+1);
+    }
+
+    render () {
+        return (
+            <div>
+                <br/>
+                <Row>
+                    <Col lg={6} md={6} sm={12} xs={12}>
+                        <Label for="selectOrigen">Origen:</Label>
+                        <div class={(this.state.validationOrigen) ? 'card border-light': 'card border-danger'}>
+                            <Select
+                            id="selectOrigen"
+                            onChange={this.handleChangeOrigen}
+                            options={this.state.optOrigen}
+                            placeholder = "Selecciona..."
+                            />
+                        </div>
+                        <p class={(this.state.validationOrigen) ? 'textValid': 'textInvalid'}>Selecciona el origen</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={12} xs={12}>          
+                        <Label for="selectDestino">Destino:</Label>
+                        <div class={(this.state.validationDestino) ? 'card border-light': 'card border-danger'}>
+                            <Select
+                            id="selectDestino"
+                            onChange={this.handleChangeDestino}
+                            options={this.state.optDestino}
+                            placeholder = "Selecciona..."
+                            />
+                        </div>
+                        <p class={(this.state.validationDestino) ? 'textValid': 'textInvalid'}>Selecciona el destino</p>
+                    </Col>
+                </Row>
+                <br/>
+                <Row form> 
+                    <Col lg={6} md={6} sm={12} xs={12}>
+                    <Label for="selectFechaHora">Fecha:</Label>
+                    <div class={(this.state.validationFechaHora) ? 'card border-light': 'card border-danger'}>
+                        <Input
+                            type="date"
+                            name="date"
+                            id="selectFechaHora"
+                            placeholder="date placeholder"
+                            onChange={this.handleChangeFechaHora}
+                        />
+                    </div>
+                    <p class={(this.state.validationFechaHora) ? 'textValid': 'textInvalid'}>Selecciona la fecha</p>
+                    </Col>
+                    <Col lg={6} md={6} sm={12} xs={12}>                    
+                        <Label for="selectCorrida">Corrida:</Label>
+                        <div class={(this.state.validationCorrida) ? 'card border-light': 'card border-danger'}>
+                            <Select
+                            id="selectCorrida"
+                            onChange={this.handleChangeCorrida}
+                            options={this.state.optCorridas}
+                            placeholder = "Selecciona..."
+                            />
+                        </div>
+                        <p class={(this.state.validationCorrida) ? 'textValid': 'textInvalid'}>Selecciona la corrida</p>
+                    </Col>
+                    
+                </Row>
+                <br/>
+                <Row form>
+                    <Col lg={6} md={6} sm={12} xs={12}>
+                        <Label >Hora:</Label>
+                        <Input plaintext value={this.state.hora} readOnly/>
+                    </Col>
+                </Row>
+            </div>
+        );
+    }
+}
+
+class SecondStep extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            comprobar: false,
+            noAsiento: null,
+            noAsientos: null,
+            cont: 0,
+            //Asientos
+            asiento1: null,
+            asiento2: null,
+            asiento3: null,
+            asiento4: null,
+            asiento5: null,
+            asiento6: null,
+            asiento7: null,
+            asiento8: null,
+            asiento9: null,
+            asiento10: null,
+            asiento11: null,
+            asiento12: null,
+            asiento13: null,
+            asiento14: null,
+            asiento15: null,
+            asiento16: null,
+            asiento17: null,
+            asiento18: null,
+            asiento19: null,
+            asiento20: null,
+            asiento21: null,
+            asiento22: null,
+            asiento23: null,
+            asiento24: null,
+            asiento25: null,
+            asiento26: null,
+            asiento27: null,
+            asiento28: null,
+            asiento29: null,
+            asiento30: null,
+            asiento31: null,
+            asiento32: null,
+            asiento33: null,
+            asiento34: null,
+            asiento35: null,
+            asiento36: null,
+            asiento37: null,
+            asiento38: null,
+            asiento39: null,
+            asiento40: null,
+            asiento41: null,
+            asiento42: null,
+            //FIN Asientos
+            //IS SELECTED VARS
+            selected1: false,
+            selected2: false,
+            selected3: false,
+            selected4: false,
+            selected5: false,
+            selected6: false,
+            selected7: false,
+            selected8: false,
+            selected9: false,
+            selected10: false,
+            selected11: false,
+            selected12: false,
+            selected13: false,
+            selected14: false,
+            selected15: false,
+            selected16: false,
+            selected17: false,
+            selected18: false,
+            selected19: false,
+            selected20: false,
+            selected21: false,
+            selected22: false,
+            selected23: false,
+            selected24: false,
+            selected25: false,
+            selected26: false,
+            selected27: false,
+            selected28: false,
+            selected29: false,
+            selected30: false,
+            selected31: false,
+            selected32: false,
+            selected33: false,
+            selected34: false,
+            selected35: false,
+            selected36: false,
+            selected37: false,
+            selected38: false,
+            selected39: false,
+            selected40: false,
+            selected41: false,
+            selected42: false,
+            //GENERO VALUE
+            genero1: false,
+            genero2: false,
+            genero3: false,
+            genero4: false,
+            genero5: false,
+            genero6: false,
+            genero7: false,
+            genero8: false,
+            genero9: false,
+            genero10: false,
+            genero11: false,
+            genero12: false,
+            genero13: false,
+            genero14: false,
+            genero15: false,
+            genero16: false,
+            genero17: false,
+            genero18: false,
+            genero19: false,
+            genero20: false,
+            genero21: false,
+            genero22: false,
+            genero23: false,
+            genero24: false,
+            genero25: false,
+            genero26: false,
+            genero27: false,
+            genero28: false,
+            genero29: false,
+            genero30: false,
+            genero31: false,
+            genero32: false,
+            genero33: false,
+            genero34: false,
+            genero35: false,
+            genero36: false,
+            genero37: false,
+            genero38: false,
+            genero39: false,
+            genero40: false,
+            genero41: false,
+            genero42: false,
+
+            //FIN IS SELECTED VARS
+        }
+        this.handleClickComprobar = this.handleClickComprobar.bind(this);
+        this.handleSelectAsiento = this.handleSelectAsiento.bind(this);
+        //this.selectSeat = this.selectSeat.bind(this);
+        this.fetchCamion = this.fetchCamion.bind(this);
+        this.fetchAsientos = this.fetchAsientos.bind(this);
+        this.fetchUsuario = this.fetchUsuario.bind(this);
+        this.fetchApartados = this.fetchApartados.bind(this);
+    }
+
+    handleClickComprobar(){
+        //Primero sacamos la capacidad del camión.
+        //this.fetchCamion();
+        this.fetchAsientos();
+        this.setState({
+            comprobar: true
+        })
+    }
+
+    fetchCamion(){
+        //console.log(generalData.detalles.numeroEconomico);
+        fetch('/api/Camiones/'+generalData.detalles.numeroEconomico+'/no')
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                noAsientos: data[0].capacidad
+            })
+        })
+        .then(() => {
+            this.fetchAsientos();
+        });
+    }
+
+    fetchCorrida(){
+        fetch('/api/Camiones/'+generalData.detalles.numeroEconomico+'/no')
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                noAsientos: data[0].capacidad
+            })
+        })
+        .then(() => {
+            this.fetchAsientos();
+        });
+    }
+
+    fetchAsientos(){
+        console.log(`/api/AsignarViajes/${generalData.detalles.idViaje}/asientosVenta`);
+        fetch(`/api/AsignarViajes/${generalData.detalles.idViaje}/asientosVenta`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({
+              noAsientos: data.capacidad,
+              //ASIENTOS//////////////////////////////
+              asiento1: data.asientos.asiento_1.status,
+              asiento2: data.asientos.asiento_2.status,
+              asiento3: data.asientos.asiento_3.status,
+              asiento4: data.asientos.asiento_4.status,
+              asiento5: data.asientos.asiento_5.status,
+              asiento6: data.asientos.asiento_6.status,
+              asiento7: data.asientos.asiento_7.status,
+              asiento8: data.asientos.asiento_8.status,
+              asiento9: data.asientos.asiento_9.status,
+              asiento10: data.asientos.asiento_10.status,
+              asiento11: data.asientos.asiento_11.status,
+              asiento12: data.asientos.asiento_12.status,
+              asiento13: data.asientos.asiento_13.status,
+              asiento14: data.asientos.asiento_14.status,
+              asiento15: data.asientos.asiento_15.status,
+              asiento16: data.asientos.asiento_16.status,
+              asiento17: data.asientos.asiento_17.status,
+              asiento18: data.asientos.asiento_18.status,
+              asiento19: data.asientos.asiento_19.status,
+              asiento20: data.asientos.asiento_20.status,
+              asiento21: data.asientos.asiento_21.status,
+              asiento22: data.asientos.asiento_22.status,
+              asiento23: data.asientos.asiento_23.status,
+              asiento24: data.asientos.asiento_24.status,
+              asiento25: data.asientos.asiento_25.status,
+              asiento26: data.asientos.asiento_26.status,
+              asiento27: data.asientos.asiento_27.status,
+              asiento28: data.asientos.asiento_28.status,
+              asiento29: data.asientos.asiento_29.status,
+              asiento30: data.asientos.asiento_30.status,
+              asiento31: data.asientos.asiento_31.status,
+              asiento32: data.asientos.asiento_32.status,
+              asiento33: data.asientos.asiento_33.status,
+              asiento34: data.asientos.asiento_34.status,
+              asiento35: data.asientos.asiento_35.status,
+              asiento36: data.asientos.asiento_36.status,
+              asiento37: data.asientos.asiento_37.status,
+              asiento38: data.asientos.asiento_38.status,
+              asiento39: data.asientos.asiento_39.status,
+              asiento40: data.asientos.asiento_40.status,
+              asiento41: data.asientos.asiento_41.status,
+              asiento42: data.asientos.asiento_42.status,
+              asiento43: data.asientos.asiento_43.status,
+              asiento44: data.asientos.asiento_44.status,
+              asiento45: data.asientos.asiento_45.status,
+              asiento46: data.asientos.asiento_46.status,
+              asiento47: data.asientos.asiento_47.status,
+              asiento48: data.asientos.asiento_48.status,
+              //GENERO/////////////////////////////////
+              genero1: data.asientos.asiento_1.genero,
+              genero2: data.asientos.asiento_2.genero,
+              genero3: data.asientos.asiento_3.genero,
+              genero4: data.asientos.asiento_4.genero,
+              genero5: data.asientos.asiento_5.genero,
+              genero6: data.asientos.asiento_6.genero,
+              genero7: data.asientos.asiento_7.genero,
+              genero8: data.asientos.asiento_8.genero,
+              genero9: data.asientos.asiento_9.genero,
+              genero10: data.asientos.asiento_10.genero,
+              genero11: data.asientos.asiento_11.genero,
+              genero12: data.asientos.asiento_12.genero,
+              genero13: data.asientos.asiento_13.genero,
+              genero14: data.asientos.asiento_14.genero,
+              genero15: data.asientos.asiento_15.genero,
+              genero16: data.asientos.asiento_16.genero,
+              genero17: data.asientos.asiento_17.genero,
+              genero18: data.asientos.asiento_18.genero,
+              genero19: data.asientos.asiento_19.genero,
+              genero20: data.asientos.asiento_20.genero,
+              genero21: data.asientos.asiento_21.genero,
+              genero22: data.asientos.asiento_22.genero,
+              genero23: data.asientos.asiento_23.genero,
+              genero24: data.asientos.asiento_24.genero,
+              genero25: data.asientos.asiento_25.genero,
+              genero26: data.asientos.asiento_26.genero,
+              genero27: data.asientos.asiento_27.genero,
+              genero28: data.asientos.asiento_28.genero,
+              genero29: data.asientos.asiento_29.genero,
+              genero30: data.asientos.asiento_30.genero,
+              genero31: data.asientos.asiento_31.genero,
+              genero32: data.asientos.asiento_32.genero,
+              genero33: data.asientos.asiento_33.genero,
+              genero34: data.asientos.asiento_34.genero,
+              genero35: data.asientos.asiento_35.genero,
+              genero36: data.asientos.asiento_36.genero,
+              genero37: data.asientos.asiento_37.genero,
+              genero38: data.asientos.asiento_38.genero,
+              genero39: data.asientos.asiento_39.genero,
+              genero40: data.asientos.asiento_40.genero,
+              genero41: data.asientos.asiento_41.genero,
+              genero42: data.asientos.asiento_42.genero,
+              genero43: data.asientos.asiento_43.genero,
+              genero44: data.asientos.asiento_44.genero,
+              genero45: data.asientos.asiento_45.genero,
+              genero46: data.asientos.asiento_46.genero,
+              genero47: data.asientos.asiento_47.genero,
+              genero48: data.asientos.asiento_48.genero,
+            })
+        }).then(()=>{
+            this.fetchUsuario();
+        });
+    }
+
+    fetchUsuario(){
+        fetch(`/api/Usuarios/${generalData.vendedor.username}`)
+            .then(res => res.json())
+            .then(data => {
+                //console.log(data);
+                generalData.vendedor.id_Usuario = data[0]._id;
+                generalData.vendedor.nombre = data[0].nombre;
+                generalData.vendedor.apellidoPaterno = data[0].apellidoPaterno;
+                generalData.vendedor.apellidoMaterno = data[0].apellidoMaterno;
+                generalData.vendedor.sucursal = data[0].sucursal;
+                generalData.vendedor.seguridad = data[0].seguridad;
+                generalData.vendedor.tipoDescuento = data[0].tipoDescuento;
+            }).then(() => {
+                this.fetchApartados();
+            })
+    }
+
+    fetchApartados(){
+        fetch('/api/Apartados/'+generalData.vendedor.id_Usuario+'/'+generalData.detalles.idViaje)
+        .then(res => res.json())
+        .then(data => {
+            if(data.length>0){
+                //console.log(data[0].asientos);
+                //let arrayAsientos = data[0].asientos;
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i].asiento == 1){
+                        this.setState({
+                            asiento1: 'false',
+                            selected1: true
+                        });
+                        generalData.asientosSelected.selected1 = true;
+                    }
+                    if(data[i].asiento == 2){
+                        this.setState({
+                            asiento2: 'false',
+                            selected2: true
+                        });
+                        generalData.asientosSelected.selected2 = true;
+                    }
+                    if(data[i].asiento == 3){
+                        this.setState({
+                            asiento3: 'false',
+                            selected3: true
+                        });
+                        generalData.asientosSelected.selected3 = true;
+                    }
+                    if(data[i].asiento == 4){
+                        this.setState({
+                            asiento4: 'false',
+                            selected4: true
+                        });
+                        generalData.asientosSelected.selected4 = true;
+                    }
+                    if(data[i].asiento == 5){
+                        this.setState({
+                            asiento5: 'false',
+                            selected5: true
+                        });
+                        generalData.asientosSelected.selected5 = true;
+                    }
+                    if(data[i].asiento == 6){
+                        this.setState({
+                            asiento6: 'false',
+                            selected6: true
+                        });
+                        generalData.asientosSelected.selected6 = true;
+                    }
+                    if(data[i].asiento == 7){
+                        this.setState({
+                            asiento7: 'false',
+                            selected7: true
+                        });
+                        generalData.asientosSelected.selected7 = true;
+                    }
+                    if(data[i].asiento == 8){
+                        this.setState({
+                            asiento8: 'false',
+                            selected8: true
+                        });
+                        generalData.asientosSelected.selected8 = true;
+                    }
+                    if(data[i].asiento == 9){
+                        this.setState({
+                            asiento9: 'false',
+                            selected9: true
+                        });
+                        generalData.asientosSelected.selected9 = true;
+                    }
+                    if(data[i].asiento == 10){
+                        this.setState({
+                            asiento10: 'false',
+                            selected10: true
+                        });
+                        generalData.asientosSelected.selected10 = true;
+                    }
+                    if(data[i].asiento == 11){
+                        this.setState({
+                            asiento11: 'false',
+                            selected11: true
+                        });
+                        generalData.asientosSelected.selected11 = true;
+                    }
+                    if(data[i].asiento == 12){
+                        this.setState({
+                            asiento12: 'false',
+                            selected12: true
+                        });
+                        generalData.asientosSelected.selected12 = true;
+                    }
+                    if(data[i].asiento == 13){
+                        this.setState({
+                            asiento13: 'false',
+                            selected13: true
+                        });
+                        generalData.asientosSelected.selected13 = true;
+                    }
+                    if(data[i].asiento == 14){
+                        this.setState({
+                            asiento14: 'false',
+                            selected14: true
+                        });
+                        generalData.asientosSelected.selected14 = true;
+                    }
+                    if(data[i].asiento == 15){
+                        this.setState({
+                            asiento15: 'false',
+                            selected15: true
+                        });
+                        generalData.asientosSelected.selected15 = true;
+                    }
+                    if(data[i].asiento == 16){
+                        this.setState({
+                            asiento16: 'false',
+                            selected16: true
+                        });
+                        generalData.asientosSelected.selected16 = true;
+                    }
+                    if(data[i].asiento == 17){
+                        this.setState({
+                            asiento17: 'false',
+                            selected17: true
+                        });
+                        generalData.asientosSelected.selected17 = true;
+                    }
+                    if(data[i].asiento == 18){
+                        this.setState({
+                            asiento18: 'false',
+                            selected18: true
+                        });
+                        generalData.asientosSelected.selected18 = true;
+                    }
+                    if(data[i].asiento == 19){
+                        this.setState({
+                            asiento19: 'false',
+                            selected19: true
+                        });
+                        generalData.asientosSelected.selected19 = true;
+                    }
+                    if(data[i].asiento == 20){
+                        this.setState({
+                            asiento20: 'false',
+                            selected20: true
+                        });
+                        generalData.asientosSelected.selected20 = true;
+                    }
+                    if(data[i].asiento == 21){
+                        this.setState({
+                            asiento21: 'false',
+                            selected21: true
+                        });
+                        generalData.asientosSelected.selected21 = true;
+                    }
+                    if(data[i].asiento == 22){
+                        this.setState({
+                            asiento22: 'false',
+                            selected22: true
+                        });
+                        generalData.asientosSelected.selected22 = true;
+                    }
+                    if(data[i].asiento == 23){
+                        this.setState({
+                            asiento23: 'false',
+                            selected23: true
+                        });
+                        generalData.asientosSelected.selected23 = true;
+                    }
+                    if(data[i].asiento == 24){
+                        this.setState({
+                            asiento24: 'false',
+                            selected24: true
+                        });
+                        generalData.asientosSelected.selected24 = true;
+                    }
+                    if(data[i].asiento == 25){
+                        this.setState({
+                            asiento25: 'false',
+                            selected25: true
+                        });
+                        generalData.asientosSelected.selected25 = true;
+                    }
+                    if(data[i].asiento == 26){
+                        this.setState({
+                            asiento26: 'false',
+                            selected26: true
+                        });
+                        generalData.asientosSelected.selected26 = true;
+                    }
+                    if(data[i].asiento == 27){
+                        this.setState({
+                            asiento27: 'false',
+                            selected27: true
+                        });
+                        generalData.asientosSelected.selected27 = true;
+                    }
+                    if(data[i].asiento == 28){
+                        this.setState({
+                            asiento28: 'false',
+                            selected28: true
+                        });
+                        generalData.asientosSelected.selected28 = true;
+                    }
+                    if(data[i].asiento == 29){
+                        this.setState({
+                            asiento29: 'false',
+                            selected29: true
+                        });
+                        generalData.asientosSelected.selected29 = true;
+                    }
+                    if(data[i].asiento == 30){
+                        this.setState({
+                            asiento30: 'false',
+                            selected30: true
+                        });
+                        generalData.asientosSelected.selected30 = true;
+                    }
+                    if(data[i].asiento == 31){
+                        this.setState({
+                            asiento31: 'false',
+                            selected31: true
+                        });
+                        generalData.asientosSelected.selected31 = true;
+                    }
+                    if(data[i].asiento == 32){
+                        this.setState({
+                            asiento32: 'false',
+                            selected32: true
+                        });
+                        generalData.asientosSelected.selected32 = true;
+                    }
+                    if(data[i].asiento == 33){
+                        this.setState({
+                            asiento33: 'false',
+                            selected33: true
+                        });
+                        generalData.asientosSelected.selected33 = true;
+                    }
+                    if(data[i].asiento == 34){
+                        this.setState({
+                            asiento34: 'false',
+                            selected34: true
+                        });
+                        generalData.asientosSelected.selected34 = true;
+                    }
+                    if(data[i].asiento == 35){
+                        this.setState({
+                            asiento35: 'false',
+                            selected35: true
+                        });
+                        generalData.asientosSelected.selected35 = true;
+                    }
+                    if(data[i].asiento == 36){
+                        this.setState({
+                            asiento36: 'false',
+                            selected36: true
+                        });
+                        generalData.asientosSelected.selected36 = true;
+                    }
+                    if(data[i].asiento == 37){
+                        this.setState({
+                            asiento37: 'false',
+                            selected37: true
+                        });
+                        generalData.asientosSelected.selected37 = true;
+                    }
+                    if(data[i].asiento == 38){
+                        this.setState({
+                            asiento38: 'false',
+                            selected38: true
+                        });
+                        generalData.asientosSelected.selected38 = true;
+                    }
+                    if(data[i].asiento == 39){
+                        this.setState({
+                            asiento39: 'false',
+                            selected39: true
+                        });
+                        generalData.asientosSelected.selected39 = true;
+                    }
+                    if(data[i].asiento == 40){
+                        this.setState({
+                            asiento40: 'false',
+                            selected40: true
+                        });
+                        generalData.asientosSelected.selected40 = true;
+                    }
+                    if(data[i].asiento == 41){
+                        this.setState({
+                            asiento41: 'false',
+                            selected41: true
+                        });
+                        generalData.asientosSelected.selected41 = true;
+                    }
+                    if(data[i].asiento == 42){
+                        this.setState({
+                            asiento42: 'false',
+                            selected42: true
+                        });
+                        generalData.asientosSelected.selected42 = true;
+                    }
+                    if(data[i].asiento == 43){
+                        this.setState({
+                            asiento43: 'false',
+                            selected43: true
+                        });
+                        generalData.asientosSelected.selected43 = true;
+                    }
+                    if(data[i].asiento == 44){
+                        this.setState({
+                            asiento44: 'false',
+                            selected44: true
+                        });
+                        generalData.asientosSelected.selected44 = true;
+                    }
+                    if(data[i].asiento == 45){
+                        this.setState({
+                            asiento45: 'false',
+                            selected45: true
+                        });
+                        generalData.asientosSelected.selected45 = true;
+                    }
+                    if(data[i].asiento == 46){
+                        this.setState({
+                            asiento46: 'false',
+                            selected46: true
+                        });
+                        generalData.asientosSelected.selected46 = true;
+                    }
+                    if(data[i].asiento == 47){
+                        this.setState({
+                            asiento47: 'false',
+                            selected47: true
+                        });
+                        generalData.asientosSelected.selected47 = true;
+                    }
+                    if(data[i].asiento == 48){
+                        this.setState({
+                            asiento48: 'false',
+                            selected48: true
+                        });
+                        generalData.asientosSelected.selected48 = true;
+                    }
+                }
+            }
+        })
+    }
+
+    handleSelectAsiento(e){
+        let id = e.target.id || e.target.name;
+        //Primero verificamos que anteriormente no haya algun asiento ya seleccionado
+        //En caso de que ya este seleccionado alguno, procedemos a regresar a su estado original
+
+        generalData.detalles.noAsiento = id;
+        console.log(id);
+        let idVendedor = generalData.vendedor.id_Usuario;
+        let idViaje = generalData.detalles.idViaje;
+        let fecha = new Date();
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth();
+        let anio = fecha.getFullYear();
+        let fechaCreacion = `${dia}-${mes}-${anio}`;
+        let asiento = "";
+        switch (id) {
+            case '1':
+                if(!this.state.selected1){//No está seleccionado el asiento
+                    asiento = "1";
+                    fetch(`/api/AsignarViajes/${idViaje}/1/${idVendedor}/Hola`, {
+                        method: 'PUT',
+                        body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(data => {
+                        console.log(data.update);
+                        let promiseData = data;
+                        if(promiseData.update != null){
+                            this.setState({
+                                selected1: true
+                            });
+                            generalData.asientosSelected.selected1 = true;
+                        }else{
+                            alert('El asiento está ocupado');
+                            this.setState({
+                                selected1: false
+                            });
+                            generalData.asientosSelected.selected1 = false;
+                        }
+                    }).catch(err => console.log(err));
+                }else{
+                    fetch(`/api/AsignarViajes/${idViaje}/false/1/${idVendedor}/hola`, {
+                        method: 'PUT',
+                        //body: JSON.stringify(this.state),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        console.log(res.json());
+                        this.setState({
+                            selected1: false
+                        });
+                        generalData.asientosSelected.selected1 = false;
+                    });                    
+                }                
+                break;
+
+            case '2':
+                if(!this.state.selected2){//No está seleccionado el asiento
+                    asiento = "2";
+                    fetch(`/api/AsignarViajes/${idViaje}/2/${idVendedor}/Hola`, {
+                        method: 'PUT',
+                        body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(data => {
+                        console.log(data.update);
+                        let promiseData = data;
+                        if(promiseData.update != null){
+                            this.setState({
+                                selected2: true
+                            });
+                            generalData.asientosSelected.selected2 = true;
+                        }else{
+                            alert('El asiento está ocupado');
+                            this.setState({
+                                selected2: false
+                            });
+                            generalData.asientosSelected.selected2 = false;
+                        }
+                    }).catch(err => console.log(err));
+                }else{
+                    fetch(`/api/AsignarViajes/${idViaje}/false/2/${idVendedor}/hola`, {
+                        method: 'PUT',
+                        //body: JSON.stringify(this.state),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        console.log(res.json());
+                        this.setState({
+                            selected2: false
+                        });
+                        generalData.asientosSelected.selected2 = false;
+                    });                    
+                }              
+                break;
+
+                case '3':
+                    if(!this.state.selected3){//No está seleccionado el asiento
+                        asiento = "3";
+                        fetch(`/api/AsignarViajes/${idViaje}/3/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected3: true
+                                });
+                                generalData.asientosSelected.selected3 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected3: false
+                                });
+                                generalData.asientosSelected.selected3 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/3/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected3: false
+                            });
+                            generalData.asientosSelected.selected3 = false;
+                        });                    
+                    }                
+                    break;
+
+                case '4':
+                    if(!this.state.selected4){//No está seleccionado el asiento
+                        asiento = "4";
+                        fetch(`/api/AsignarViajes/${idViaje}/4/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected4: true
+                                });
+                                generalData.asientosSelected.selected4 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected4: false
+                                });
+                                generalData.asientosSelected.selected4 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/4/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected4: false
+                            });
+                            generalData.asientosSelected.selected4 = false;
+                        });                    
+                    } 
+                    break;
+
+                case '5':
+                    if(!this.state.selected5){//No está seleccionado el asiento
+                        asiento = "5";
+                        fetch(`/api/AsignarViajes/${idViaje}/5/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected5: true
+                                });
+                                generalData.asientosSelected.selected5 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected5: false
+                                });
+                                generalData.asientosSelected.selected5 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/5/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected5: false
+                            });
+                            generalData.asientosSelected.selected5 = false;
+                        });                    
+                    } 
+                    break;
+                case '6':
+                    if(!this.state.selected6){//No está seleccionado el asiento
+                        asiento = "6";
+                        fetch(`/api/AsignarViajes/${idViaje}/6/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected6: true
+                                });
+                                generalData.asientosSelected.selected6 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected6: false
+                                });
+                                generalData.asientosSelected.selected6 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/6/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected6: false
+                            });
+                            generalData.asientosSelected.selected6 = false;
+                        });                    
+                    } 
+                    break;
+                case '7':
+                    if(!this.state.selected7){//No está seleccionado el asiento
+                        asiento = "7";
+                        fetch(`/api/AsignarViajes/${idViaje}/7/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected7: true
+                                });
+                                generalData.asientosSelected.selected7 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected7: false
+                                });
+                                generalData.asientosSelected.selected7 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/7/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected7: false
+                            });
+                            generalData.asientosSelected.selected7 = false;
+                        });                    
+                    } 
+                    break;
+                case '8':
+                    if(!this.state.selected8){//No está seleccionado el asiento
+                        asiento = "8";
+                        fetch(`/api/AsignarViajes/${idViaje}/8/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected8: true
+                                });
+                                generalData.asientosSelected.selected8 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected8: false
+                                });
+                                generalData.asientosSelected.selected8 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/8/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected8: false
+                            });
+                            generalData.asientosSelected.selected8 = false;
+                        });                    
+                    } 
+                    break;
+                case '9':
+                    if(!this.state.selected9){//No está seleccionado el asiento
+                        asiento = "9";
+                        fetch(`/api/AsignarViajes/${idViaje}/9/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected9: true
+                                });
+                                generalData.asientosSelected.selected9 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected9: false
+                                });
+                                generalData.asientosSelected.selected9 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/9/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected9: false
+                            });
+                            generalData.asientosSelected.selected9 = false;
+                        });                    
+                    } 
+                    break;
+                case '10':
+                    if(!this.state.selected10){//No está seleccionado el asiento
+                        asiento = "10";
+                        fetch(`/api/AsignarViajes/${idViaje}/10/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected10: true
+                                });
+                                generalData.asientosSelected.selected10 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected10: false
+                                });
+                                generalData.asientosSelected.selected10 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/10/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected10: false
+                            });
+                            generalData.asientosSelected.selected10 = false;
+                        });                    
+                    } 
+                    break;
+                case '11':
+                    if(!this.state.selected11){//No está seleccionado el asiento
+                        asiento = "11";
+                        fetch(`/api/AsignarViajes/${idViaje}/11/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected11: true
+                                });
+                                generalData.asientosSelected.selected11 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected11: false
+                                });
+                                generalData.asientosSelected.selected11 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/11/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected11: false
+                            });
+                            generalData.asientosSelected.selected11 = false;
+                        });                    
+                    } 
+                    break;
+                case '12':
+                    if(!this.state.selected12){//No está seleccionado el asiento
+                        asiento = "12";
+                        fetch(`/api/AsignarViajes/${idViaje}/12/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected12: true
+                                });
+                                generalData.asientosSelected.selected12 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected12: false
+                                });
+                                generalData.asientosSelected.selected12 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/12/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected12: false
+                            });
+                            generalData.asientosSelected.selected12 = false;
+                        });                    
+                    } 
+                    break;
+                case '13':
+                    if(!this.state.selected13){//No está seleccionado el asiento
+                        asiento = "13";
+                        fetch(`/api/AsignarViajes/${idViaje}/13/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected13: true
+                                });
+                                generalData.asientosSelected.selected13 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected13: false
+                                });
+                                generalData.asientosSelected.selected13 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/13/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected13: false
+                            });
+                            generalData.asientosSelected.selected13 = false;
+                        });                    
+                    } 
+                    break;
+                case '14':
+                    if(!this.state.selected14){//No está seleccionado el asiento
+                        asiento = "14";
+                        fetch(`/api/AsignarViajes/${idViaje}/14/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected14: true
+                                });
+                                generalData.asientosSelected.selected14 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected14: false
+                                });
+                                generalData.asientosSelected.selected14 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/14/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected14: false
+                            });
+                            generalData.asientosSelected.selected14 = false;
+                        });                    
+                    } 
+                    break;
+                case '15':
+                    if(!this.state.selected15){//No está seleccionado el asiento
+                        asiento = "15";
+                        fetch(`/api/AsignarViajes/${idViaje}/15/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected15: true
+                                });
+                                generalData.asientosSelected.selected15 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected15: false
+                                });
+                                generalData.asientosSelected.selected15 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/15/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected15: false
+                            });
+                            generalData.asientosSelected.selected15 = false;
+                        });                    
+                    } 
+                    break;
+                case '16':
+                    if(!this.state.selected16){//No está seleccionado el asiento
+                        asiento = "16";
+                        fetch(`/api/AsignarViajes/${idViaje}/16/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected16: true
+                                });
+                                generalData.asientosSelected.selected16 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected16: false
+                                });
+                                generalData.asientosSelected.selected16 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/16/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected16: false
+                            });
+                            generalData.asientosSelected.selected16 = false;
+                        });                    
+                    } 
+                    break;
+                case '17':
+                    if(!this.state.selected17){//No está seleccionado el asiento
+                        asiento = "17";
+                        fetch(`/api/AsignarViajes/${idViaje}/17/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected17: true
+                                });
+                                generalData.asientosSelected.selected17 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected17: false
+                                });
+                                generalData.asientosSelected.selected17 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/17/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected17: false
+                            });
+                            generalData.asientosSelected.selected17 = false;
+                        });                    
+                    } 
+                    break;
+                case '18':
+                    if(!this.state.selected18){//No está seleccionado el asiento
+                        asiento = "18";
+                        fetch(`/api/AsignarViajes/${idViaje}/18/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected18: true
+                                });
+                                generalData.asientosSelected.selected18 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected18: false
+                                });
+                                generalData.asientosSelected.selected18 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/18/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected18: false
+                            });
+                            generalData.asientosSelected.selected18 = false;
+                        });                    
+                    } 
+                    break;
+                case '19':
+                    if(!this.state.selected19){//No está seleccionado el asiento
+                        asiento = "19";
+                        fetch(`/api/AsignarViajes/${idViaje}/19/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected19: true
+                                });
+                                generalData.asientosSelected.selected19 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected19: false
+                                });
+                                generalData.asientosSelected.selected19 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/19/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected19: false
+                            });
+                            generalData.asientosSelected.selected19 = false;
+                        });                    
+                    } 
+                    break;
+                case '20':
+                    if(!this.state.selected20){//No está seleccionado el asiento
+                        asiento = "20";
+                        fetch(`/api/AsignarViajes/${idViaje}/20/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected20: true
+                                });
+                                generalData.asientosSelected.selected20 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected20: false
+                                });
+                                generalData.asientosSelected.selected20 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/20/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected20: false
+                            });
+                            generalData.asientosSelected.selected20 = false;
+                        });                    
+                    } 
+                    break;
+                case '21':
+                    if(!this.state.selected21){//No está seleccionado el asiento
+                        asiento = "21";
+                        fetch(`/api/AsignarViajes/${idViaje}/21/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected21: true
+                                });
+                                generalData.asientosSelected.selected21 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected21: false
+                                });
+                                generalData.asientosSelected.selected21 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/21/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected21: false
+                            });
+                            generalData.asientosSelected.selected21 = false;
+                        });                    
+                    } 
+                    break;
+                case '22':
+                    if(!this.state.selected22){//No está seleccionado el asiento
+                        asiento = "22";
+                        fetch(`/api/AsignarViajes/${idViaje}/22/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected22: true
+                                });
+                                generalData.asientosSelected.selected22 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected22: false
+                                });
+                                generalData.asientosSelected.selected22 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/22/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected22: false
+                            });
+                            generalData.asientosSelected.selected22 = false;
+                        });                    
+                    } 
+                    break;
+                case '23':
+                    if(!this.state.selected23){//No está seleccionado el asiento
+                        asiento = "23";
+                        fetch(`/api/AsignarViajes/${idViaje}/23/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected23: true
+                                });
+                                generalData.asientosSelected.selected23 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected23: false
+                                });
+                                generalData.asientosSelected.selected23 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/23/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected23: false
+                            });
+                            generalData.asientosSelected.selected23 = false;
+                        });                    
+                    } 
+                    break;
+                case '24':
+                    if(!this.state.selected24){//No está seleccionado el asiento
+                        asiento = "24";
+                        fetch(`/api/AsignarViajes/${idViaje}/24/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected24: true
+                                });
+                                generalData.asientosSelected.selected24 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected24: false
+                                });
+                                generalData.asientosSelected.selected24 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/24/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected24: false
+                            });
+                            generalData.asientosSelected.selected24 = false;
+                        });                    
+                    } 
+                    break;
+                case '25':
+                    if(!this.state.selected25){//No está seleccionado el asiento
+                        asiento = "25";
+                        fetch(`/api/AsignarViajes/${idViaje}/25/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected25: true
+                                });
+                                generalData.asientosSelected.selected25 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected25: false
+                                });
+                                generalData.asientosSelected.selected25 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/25/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected25: false
+                            });
+                            generalData.asientosSelected.selected25 = false;
+                        });                    
+                    } 
+                    break;
+                case '26':
+                    if(!this.state.selected26){//No está seleccionado el asiento
+                        asiento = "26";
+                        fetch(`/api/AsignarViajes/${idViaje}/26/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected26: true
+                                });
+                                generalData.asientosSelected.selected26 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected26: false
+                                });
+                                generalData.asientosSelected.selected26 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/26/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected26: false
+                            });
+                            generalData.asientosSelected.selected26 = false;
+                        });                    
+                    } 
+                    break;
+                case '27':
+                    if(!this.state.selected27){//No está seleccionado el asiento
+                        asiento = "27";
+                        fetch(`/api/AsignarViajes/${idViaje}/27/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected27: true
+                                });
+                                generalData.asientosSelected.selected27 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected27: false
+                                });
+                                generalData.asientosSelected.selected27 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/27/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected27: false
+                            });
+                            generalData.asientosSelected.selected27 = false;
+                        });                    
+                    } 
+                    break;
+                case '28':
+                    if(!this.state.selected28){//No está seleccionado el asiento
+                        asiento = "28";
+                        fetch(`/api/AsignarViajes/${idViaje}/28/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected28: true
+                                });
+                                generalData.asientosSelected.selected28 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected28: false
+                                });
+                                generalData.asientosSelected.selected28 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/28/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected28: false
+                            });
+                            generalData.asientosSelected.selected28 = false;
+                        });                    
+                    } 
+                    break;
+                case '29':
+                    if(!this.state.selected29){//No está seleccionado el asiento
+                        asiento = "29";
+                        fetch(`/api/AsignarViajes/${idViaje}/29/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected29: true
+                                });
+                                generalData.asientosSelected.selected29 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected29: false
+                                });
+                                generalData.asientosSelected.selected29 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/29/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected29: false
+                            });
+                            generalData.asientosSelected.selected29 = false;
+                        });                    
+                    } 
+                    break;
+                case '30':
+                    if(!this.state.selected30){//No está seleccionado el asiento
+                        asiento = "30";
+                        fetch(`/api/AsignarViajes/${idViaje}/30/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected30: true
+                                });
+                                generalData.asientosSelected.selected30 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected30: false
+                                });
+                                generalData.asientosSelected.selected30 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/30/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected30: false
+                            });
+                            generalData.asientosSelected.selected30 = false;
+                        });                    
+                    } 
+                    break;
+                case '31':
+                    if(!this.state.selected31){//No está seleccionado el asiento
+                        asiento = "31";
+                        fetch(`/api/AsignarViajes/${idViaje}/31/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected31: true
+                                });
+                                generalData.asientosSelected.selected31 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected31: false
+                                });
+                                generalData.asientosSelected.selected31 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/31/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected31: false
+                            });
+                            generalData.asientosSelected.selected31 = false;
+                        });                    
+                    } 
+                    break;
+                case '32':
+                    if(!this.state.selected32){//No está seleccionado el asiento
+                        asiento = "32";
+                        fetch(`/api/AsignarViajes/${idViaje}/32/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected32: true
+                                });
+                                generalData.asientosSelected.selected32 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected32: false
+                                });
+                                generalData.asientosSelected.selected32 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/32/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected32: false
+                            });
+                            generalData.asientosSelected.selected32 = false;
+                        });                    
+                    } 
+                    break;
+                case '33':
+                    if(!this.state.selected33){//No está seleccionado el asiento
+                        asiento = "33";
+                        fetch(`/api/AsignarViajes/${idViaje}/33/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected33: true
+                                });
+                                generalData.asientosSelected.selected33 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected33: false
+                                });
+                                generalData.asientosSelected.selected33 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/33/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected33: false
+                            });
+                            generalData.asientosSelected.selected33 = false;
+                        });                    
+                    } 
+                    break;
+                case '34':
+                    if(!this.state.selected34){//No está seleccionado el asiento
+                        asiento = "34";
+                        fetch(`/api/AsignarViajes/${idViaje}/34/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected34: true
+                                });
+                                generalData.asientosSelected.selected34 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected34: false
+                                });
+                                generalData.asientosSelected.selected34 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/34/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected34: false
+                            });
+                            generalData.asientosSelected.selected34 = false;
+                        });                    
+                    } 
+                    break;
+                case '35':
+                    if(!this.state.selected35){//No está seleccionado el asiento
+                        asiento = "35";
+                        fetch(`/api/AsignarViajes/${idViaje}/35/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected35: true
+                                });
+                                generalData.asientosSelected.selected35 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected35: false
+                                });
+                                generalData.asientosSelected.selected35 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/35/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected35: false
+                            });
+                            generalData.asientosSelected.selected35 = false;
+                        });                    
+                    } 
+                    break;
+                case '36':
+                    if(!this.state.selected36){//No está seleccionado el asiento
+                        asiento = "36";
+                        fetch(`/api/AsignarViajes/${idViaje}/36/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected36: true
+                                });
+                                generalData.asientosSelected.selected36 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected36: false
+                                });
+                                generalData.asientosSelected.selected36 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/36/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected36: false
+                            });
+                            generalData.asientosSelected.selected36 = false;
+                        });                    
+                    } 
+                    break;
+                case '37':
+                    if(!this.state.selected37){//No está seleccionado el asiento
+                        asiento = "37";
+                        fetch(`/api/AsignarViajes/${idViaje}/37/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected37: true
+                                });
+                                generalData.asientosSelected.selected37 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected37: false
+                                });
+                                generalData.asientosSelected.selected37 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/37/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected37: false
+                            });
+                            generalData.asientosSelected.selected37 = false;
+                        });                    
+                    } 
+                    break;
+                case '38':
+                    if(!this.state.selected38){//No está seleccionado el asiento
+                        asiento = "38";
+                        fetch(`/api/AsignarViajes/${idViaje}/38/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected38: true
+                                });
+                                generalData.asientosSelected.selected38 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected38: false
+                                });
+                                generalData.asientosSelected.selected38 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/38/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected38: false
+                            });
+                            generalData.asientosSelected.selected38 = false;
+                        });                    
+                    } 
+                    break;
+                case '39':
+                    if(!this.state.selected39){//No está seleccionado el asiento
+                        asiento = "39";
+                        fetch(`/api/AsignarViajes/${idViaje}/39/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected39: true
+                                });
+                                generalData.asientosSelected.selected39 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected39: false
+                                });
+                                generalData.asientosSelected.selected39 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/39/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected39: false
+                            });
+                            generalData.asientosSelected.selected39 = false;
+                        });                    
+                    } 
+                    break;
+                case '40':
+                    if(!this.state.selected40){//No está seleccionado el asiento
+                        asiento = "40";
+                        fetch(`/api/AsignarViajes/${idViaje}/40/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected40: true
+                                });
+                                generalData.asientosSelected.selected40 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected40: false
+                                });
+                                generalData.asientosSelected.selected40 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/40/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected40: false
+                            });
+                            generalData.asientosSelected.selected40 = false;
+                        });                    
+                    } 
+                    break;
+                case '41':
+                    if(!this.state.selected41){//No está seleccionado el asiento
+                        asiento = "41";
+                        fetch(`/api/AsignarViajes/${idViaje}/41/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected41: true
+                                });
+                                generalData.asientosSelected.selected41 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected41: false
+                                });
+                                generalData.asientosSelected.selected41 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/41/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected41: false
+                            });
+                            generalData.asientosSelected.selected41 = false;
+                        });                    
+                    } 
+                    break;
+                case '42':
+                    if(!this.state.selected42){//No está seleccionado el asiento
+                        asiento = "42";
+                        fetch(`/api/AsignarViajes/${idViaje}/42/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected42: true
+                                });
+                                generalData.asientosSelected.selected42 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected42: false
+                                });
+                                generalData.asientosSelected.selected42 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/42/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected42: false
+                            });
+                            generalData.asientosSelected.selected42 = false;
+                        });                    
+                    } 
+                    break;
+                case '43':
+                    if(!this.state.selected43){//No está seleccionado el asiento
+                        asiento = "43";
+                        fetch(`/api/AsignarViajes/${idViaje}/43/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected43: true
+                                });
+                                generalData.asientosSelected.selected43 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected43: false
+                                });
+                                generalData.asientosSelected.selected43 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/43/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected43: false
+                            });
+                            generalData.asientosSelected.selected43 = false;
+                        });                    
+                    } 
+                    break;
+                case '44':
+                    if(!this.state.selected44){//No está seleccionado el asiento
+                        asiento = "44";
+                        fetch(`/api/AsignarViajes/${idViaje}/44/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected44: true
+                                });
+                                generalData.asientosSelected.selected44 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected44: false
+                                });
+                                generalData.asientosSelected.selected44 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/44/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected44: false
+                            });
+                            generalData.asientosSelected.selected44 = false;
+                        });                    
+                    } 
+                    break;
+                case '45':
+                    if(!this.state.selected45){//No está seleccionado el asiento
+                        asiento = "45";
+                        fetch(`/api/AsignarViajes/${idViaje}/45/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected45: true
+                                });
+                                generalData.asientosSelected.selected45 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected45: false
+                                });
+                                generalData.asientosSelected.selected45 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/45/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected45: false
+                            });
+                            generalData.asientosSelected.selected45 = false;
+                        });                    
+                    } 
+                    break;
+                case '46':
+                    if(!this.state.selected46){//No está seleccionado el asiento
+                        asiento = "46";
+                        fetch(`/api/AsignarViajes/${idViaje}/46/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected46: true
+                                });
+                                generalData.asientosSelected.selected46 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected46: false
+                                });
+                                generalData.asientosSelected.selected46 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/46/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected46: false
+                            });
+                            generalData.asientosSelected.selected46 = false;
+                        });                    
+                    } 
+                    break;
+                case '47':
+                    if(!this.state.selected47){//No está seleccionado el asiento
+                        asiento = "47";
+                        fetch(`/api/AsignarViajes/${idViaje}/47/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected47: true
+                                });
+                                generalData.asientosSelected.selected47 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected47: false
+                                });
+                                generalData.asientosSelected.selected47 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/47/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected47: false
+                            });
+                            generalData.asientosSelected.selected47 = false;
+                        });                    
+                    } 
+                    break;
+                case '48':
+                    if(!this.state.selected48){//No está seleccionado el asiento
+                        asiento = "48";
+                        fetch(`/api/AsignarViajes/${idViaje}/48/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected48: true
+                                });
+                                generalData.asientosSelected.selected48 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected48: false
+                                });
+                                generalData.asientosSelected.selected48 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/48/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected48: false
+                            });
+                            generalData.asientosSelected.selected48 = false;
+                        });                    
+                    } 
+                    break;
+        
+            default:
+                break;
+        }
+        
+    }
+
+    render () {
+        return (
+            <div className="text-center">  
+                <div>
+                {/* Simbologia */}
+                <Row>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button outline color="danger"><i className="fa fa-check" /></Button>{' '}
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button color="secondary" disabled><i className="fa fa-user" /></Button>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button color="danger" size="lg" className="asientoDisponible asiento">{'  '}</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Selecionado</h6>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Ocupado</h6>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Libre</h6>
+                    </Col>
+                </Row>
+                {/* Fin Simbologia */}
+                <br/>
+                <Row>
+                    <Col md="12" xs="12" sm="12" lg="12">
+                    <div>
+                        <Card body outline color="secondary"  className="text-center">
+                        <CardTitle>Seleccione los lugares</CardTitle>
+                        <br/>
+                        <div>
+                            <Button disabled={this.state.comprobar} onClick={this.handleClickComprobar} size="lg" outline color="info">Actualizar</Button>
+                        </div>
+                        <br/>
+                        <Col xs="12" sm="12" md={{ size:9, offset:3 }} lg={{ size:9, offset:3 }}>
+                            {/* Elementos CHOFER y ESCALERAS */}
+                            <Row>
+                            <Col xs="2" sm="1" className="elementosAutobus">
+                                <i className="fa fa-user-tie" />
+                            </Col>
+                            <Col xs="2" sm="1">
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                            </Col>
+                            <Col xs="2" sm="1" className="elementosAutobus">
+                                <i className="fa fa-sort-amount-down" />
+                            </Col>
+                            </Row>
+                            {/* TERMINA Elementos CHOFER y ESCALERAS */}
+                            {/* Asientos */}
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento1 == 'false') ? 
+                                    (
+                                        <button name='1' id='1' type="button" className={(this.state.selected1)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero1 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero1 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">01</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento2  == 'false') ? 
+                                    (
+                                        <button name='2' id='2' type="button" className={(this.state.selected2)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero2 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero2 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">02</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento3  == 'false') ? 
+                                    (
+                                        <button name='3' id='3' type="button" className={(this.state.selected3)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero3 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero3 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">03</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento4  == 'false') ? 
+                                    (
+                                        <button name='4' id='4' type="button" className={(this.state.selected4)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero4 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero4 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">04</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento5  == 'false') ? 
+                                    (
+                                        <button name='5' id='5' type="button" className={(this.state.selected5)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero5 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero5 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">05</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento6  == 'false') ? 
+                                    (
+                                        <button name='6' id='6' type="button" className={(this.state.selected6)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero6 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero6 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">06</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento7  == 'false') ? 
+                                    (
+                                        <button name='7' id='7' type="button" className={(this.state.selected7)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero7 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero7 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">07</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento8  == 'false') ? 
+                                    (
+                                        <button name='8' id='8' type="button" className={(this.state.selected8)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero8 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero8 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">08</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento9  == 'false') ? 
+                                    (
+                                        <button name='9' id='9' type="button" className={(this.state.selected9)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero9 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero9 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">09</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento10  == 'false') ? 
+                                    (
+                                        <button name='10' id='10' type="button" className={(this.state.selected10)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero10 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero10 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">10</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento11 == 'false') ? 
+                                    (
+                                        <button name='11' id='11' type="button" className={(this.state.selected11)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero11 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero11 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">11</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento12 == 'false') ? 
+                                    (
+                                        <button name='12' id='12' type="button" className={(this.state.selected12)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero12 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero12 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">12</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento13 == 'false') ? 
+                                    (
+                                        <button name='13' id='13' type="button" className={(this.state.selected13)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero13 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero13 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">13</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento14 == 'false') ? 
+                                    (
+                                        <button name='14' id='14' type="button" className={(this.state.selected14)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero14 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero14 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">14</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento15 == 'false') ? 
+                                    (
+                                        <button name='15' id='15' type="button" className={(this.state.selected15)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero15 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero15 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">15</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento16 == 'false') ? 
+                                    (
+                                        <button name='16' id='16' type="button" className={(this.state.selected16)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero16 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero16 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">16</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento17 == 'false') ? 
+                                    (
+                                        <button name='17' id='17' type="button" className={(this.state.selected17)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero17 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero17 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">17</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento18 == 'false') ? 
+                                    (
+                                        <button name='18' id='18' type="button" className={(this.state.selected18)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero18 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero18 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">18</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento19 == 'false') ? 
+                                    (
+                                        <button name='19' id='19' type="button" className={(this.state.selected19)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero19 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero19 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">19</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento20 == 'false') ? 
+                                    (
+                                        <button name='20' id='20' type="button" className={(this.state.selected20)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero20 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero20 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">20</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento21 == 'false') ? 
+                                    (
+                                        <button name='21' id='21' type="button" className={(this.state.selected21)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero21 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero21 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">21</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento22 == 'false') ? 
+                                    (
+                                        <button name='22' id='22' type="button" className={(this.state.selected22)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero22 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero22 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">22</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento23 == 'false') ? 
+                                    (
+                                        <button name='23' id='23' type="button" className={(this.state.selected23)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero23 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero23 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">23</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento24 == 'false') ? 
+                                    (
+                                        <button name='24' id='24' type="button" className={(this.state.selected24)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero24 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero24 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">24</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento25 == 'false') ? 
+                                    (
+                                        <button name='25' id='25' type="button" className={(this.state.selected25)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero25 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero25 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">25</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento26 == 'false') ? 
+                                    (
+                                        <button name='26' id='26' type="button" className={(this.state.selected26)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero26 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero26 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">26</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento27 == 'false') ? 
+                                    (
+                                        <button name='27' id='27' type="button" className={(this.state.selected27)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero27 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero27 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">27</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento28 == 'false') ? 
+                                    (
+                                        <button name='28' id='28' type="button" className={(this.state.selected28)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero28 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero28 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">28</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento29 == 'false') ? 
+                                    (
+                                        <button name='29' id='29' type="button" className={(this.state.selected29)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero29 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero29 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">29</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento30 == 'false') ? 
+                                    (
+                                        <button name='30' id='30' type="button" className={(this.state.selected30)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero30 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero30 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">30</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento31 == 'false') ? 
+                                    (
+                                        <button name='31' id='31' type="button" className={(this.state.selected31)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero31 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero31 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">31</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento32 == 'false') ? 
+                                    (
+                                        <button name='32' id='32' type="button" className={(this.state.selected32)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero32 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero32 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">32</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento33 == 'false') ? 
+                                    (
+                                        <button name='33' id='33' type="button" className={(this.state.selected33)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero33 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero33 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">33</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento34 == 'false') ? 
+                                    (
+                                        <button name='34' id='34' type="button" className={(this.state.selected34)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero34 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero34 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">34</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento35 == 'false') ? 
+                                    (
+                                        <button name='35' id='35' type="button" className={(this.state.selected35)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero35 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero35 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">35</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento36 == 'false') ? 
+                                    (
+                                        <button name='36' id='36' type="button" className={(this.state.selected36)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero36 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero36 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">36</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                                <Col xs="2" sm="1">
+                                    {(this.state.asiento37 == 'false') ? 
+                                        (
+                                            <button name='37' id='37' type="button" className={(this.state.selected37)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                        )
+                                        :
+                                        (
+                                            <button type="button" class={(this.state.genero37 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero37 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                        )
+                                    }
+                                    <p className="smallDevice text-center">37</p>
+                                </Col>
+                                <Col xs="2" sm="1">
+                                    {(this.state.asiento38 == 'false') ? 
+                                        (
+                                            <button name='38' id='38' type="button" className={(this.state.selected38)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                        )
+                                        :
+                                        (
+                                            <button type="button" class={(this.state.genero38 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero38 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                        )
+                                    }
+                                    <p className="smallDevice text-center">38</p>
+                                </Col>
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 39) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento39 == 'false') ? 
+                                                (
+                                                    <button name='39' id='39' type="button" className={(this.state.selected39)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero39 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero39 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">39</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 40) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento40 == 'false') ? 
+                                                (
+                                                    <button name='40' id='40' type="button" className={(this.state.selected40)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero40 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero40 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">40</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                            {/************************** ASIENTOS 41 - 48 **************************/}
+                            <Row>
+                                {
+                                    (this.state.noAsientos >= 41) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento41 == 'false') ? 
+                                                (
+                                                    <button name='41' id='41' type="button" className={(this.state.selected41)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero41 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero41 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">41</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 42) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento42 == 'false') ? 
+                                                (
+                                                    <button name='42' id='42' type="button" className={(this.state.selected42)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero42 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero42 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">42</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 43) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento43 == 'false') ? 
+                                                (
+                                                    <button name='43' id='43' type="button" className={(this.state.selected43)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero43 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero43 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">43</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 44) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento44 == 'false') ? 
+                                                (
+                                                    <button name='44' id='44' type="button" className={(this.state.selected44)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero44 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero44 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">44</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                            <Row>
+                                {
+                                    (this.state.noAsientos >= 45) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento45 == 'false') ? 
+                                                (
+                                                    <button name='45' id='45' type="button" className={(this.state.selected45)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero45 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero45 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">45</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 46) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento46 == 'false') ? 
+                                                (
+                                                    <button name='46' id='46' type="button" className={(this.state.selected46)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero46 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero46 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">46</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 47) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento47 == 'false') ? 
+                                                (
+                                                    <button name='47' id='47' type="button" className={(this.state.selected47)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero47 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero47 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">47</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 48) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento48 == 'false') ? 
+                                                (
+                                                    <button name='48' id='48' type="button" className={(this.state.selected48)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero48 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero48 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">48</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                            {/*
+                                (this.state.noAsientos >= 41) ?
+                                (
+                                    <Row>
+                                    <Col xs="2" sm="1">
+                                        {(this.state.asiento41 == 'false') ? 
+                                            (
+                                                <button name='41' id='41' type="button" className={(this.state.selected41)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                            )
+                                            :
+                                            (
+                                                <button type="button" class="btn btn-outline-secondary" disabled><i className="fa fa-user" /></button>
+                                            )
+                                        }
+                                        <p className="smallDevice text-center">41</p>
+                                    </Col>
+                                    <Col xs="2" sm="1">
+                                        {(this.state.asiento42 == 'false') ? 
+                                            (
+                                                <button name='42' id='42' type="button" className={(this.state.selected42)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                            )
+                                            :
+                                            (
+                                                <button type="button" class="btn btn-outline-secondary" disabled><i className="fa fa-user" /></button>
+                                            )
+                                        }
+                                        <p className="smallDevice text-center">42</p>
+                                    </Col>
+                                    </Row>
+                                )
+                                :
+                                ''
+                            */}
+                            
+                        {/* FIN Asientos */}
+                        </Col>
+                        </Card>
+                    </div>
+                    </Col>
+                </Row>
+                </div>
+                
+            </div>
+        );
+    }
+}
+
+class ThirdStep extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            validationActualizar: false,
+            modal: false,
+            clientes: [],
+            optCliente: [],
+            optDescuento: [],
+            resultPasajeros: [],
+            pasajeros: [],
+            asientosPorOcupar: '',
+            busqueda: '',
+            nombreBusqueda: '',
+            apaternoBusqueda: '',
+            amaternoBusqueda: '',
+        };
+
+        this.actualizar = this.actualizar.bind(this);
+        this.fetchUser = this.fetchUser.bind(this);
+        this.verificarAsientosSeleccionados = this.verificarAsientosSeleccionados.bind(this);
+        this.buscarPasajeros = this.buscarPasajeros.bind(this);
+        this.deletePasajero = this.deletePasajero.bind(this);
+
+        this.handleAddPasajero = this.handleAddPasajero.bind(this);
+        this.handleOnChangeAsiento = this.handleOnChangeAsiento.bind(this);
+        this.handleOnChangeRazon = this.handleOnChangeRazon.bind(this);
+        this.handleOnChangeDescuento = this.handleOnChangeDescuento.bind(this);
+        this.handleOnChangeNombreBusqueda = this.handleOnChangeNombreBusqueda.bind(this);
+        this.handleOnChangeApaternoBusqueda = this.handleOnChangeApaternoBusqueda.bind(this);
+        this.handleOnChangeAmaternoBusqueda = this.handleOnChangeAmaternoBusqueda.bind(this);
+
+        this.toggle = this.toggle.bind(this);
+        this.actualizarListaClientes = this.actualizarListaClientes.bind(this);
+        this.comprobarRangoDeFecha = this.comprobarRangoDeFecha.bind(this);
+    }
+
+    isValidated() {
+        if(asientos.length == pasajeros.length){
+            for (let i = 0; i < pasajeros.length; i++) {
+                console.log('descuentosLabel[i]', descuentosLabel[i]);
+                if (pasajeros[i].asiento == 0) {
+                    alert('Falta seleccionar el asiento del pasajero '+pasajeros[i].nombre);
+                    return false;
+                }
+                if(razones[i].razon == 'razon'){
+                    alert('Selecciona la razón del pasajero '+pasajeros[i].nombre);
+                    return false;
+                }
+                //Validamos descuentos
+                try {
+                    if(tipoDeViaje=="Familiar" && asientos.length < 5){
+                        alert('Para ser acreedor del descuento familiar necesitas 5 o más pasajeros');
+                        return false;
+                    }
+                    if(descuentosLabel[i] == 'Niño'){
+                        alert('descuento nino');
+                        if(tipoDeViaje == 'Normal'){
+                            if(pasajeros[i].typeClient != 'Niño'){
+                                alert('Para el cliente '+pasajeros[i].nombre+' no aplica el descuento '+'Niño');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                        
+                    }else if(descuentosLabel[i] == 'INSEN'){
+                        if(tipoDeViaje == 'Normal'){
+                            if(pasajeros[i].typeClient  != 'INSEN'){
+                                alert('Para el cliente '+pasajeros[i].nombre+' no aplica el descuento '+'INSEN');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }                            
+                    }else if(descuentosLabel[i] == 'Promoción General 1'){
+                        if(tipoDeViaje == "Normal"){
+                            let inicio = descuentoValues.fechaInicio;
+                            let final = descuentoValues.fechaFinal;
+                            
+                            let arrayInicio = inicio.split("-",3);
+                            let arrayFinal = final.split("-",3);
+
+                            let fechaInicio = new Date(arrayInicio[0],parseInt(arrayInicio[1])-1,arrayInicio[2]);
+                            let fechaFinal = new Date(arrayFinal[0],parseInt(arrayFinal[1])-1,arrayFinal[2]);
+                            let hoy = new Date();
+                            
+                            console.log('fechaInicio', fechaInicio);
+                            console.log('fechaFinal',fechaFinal);
+                            
+                            console.log('hoy', hoy);
+
+                            let comprobar = this.comprobarRangoDeFecha(fechaInicio, fechaFinal, hoy);
+                            if(!comprobar){
+                                alert(`La fecha de viaje no está dentro del rango considerado por el descuento seleccionado`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }    
+                    }else if(descuentosLabel[i] == 'Promoción General 2'){
+                        if(tipoDeViaje == "Normal"){
+                            let inicio = descuentoValues.fechaInicio;
+                            let final = descuentoValues.fechaFinal;
+                            let selectFecha = generalData.detalles.dia;
+                            
+                            let arrayInicio = inicio.split("-",3);
+                            let arrayFinal = final.split("-",3);
+                            let arrayFecha = selectFecha.split("-",3);
+
+                            let fechaInicio = new Date(arrayInicio[0],parseInt(arrayInicio[1])-1,arrayInicio[2]);
+                            let fechaFinal = new Date(arrayFinal[0],parseInt(arrayFinal[1])-1,arrayFinal[2]);
+                            let fechaSeleccionada = new Date(arrayFecha[2],parseInt(arrayFecha[1])-1,arrayFecha[0]);                                
+                            
+                            let comprobar = this.comprobarRangoDeFecha(fechaInicio, fechaFinal, fechaSeleccionada);
+                            if(!comprobar){
+                                alert(`La fecha de viaje no está dentro del rango considerado por el descuento seleccionado`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        } 
+                    }else if(descuentosLabel[i] == 'Pacoima'){
+                        if(tipoDeViaje == 'Normal'){
+                            if(generalData.destino.municipio != 'Pacoima'){
+                                descPacoima = false;
+                                alert('No has seleccionado como destino PACOIMA, por lo que no aplica este descuento');
+                                return false;
+                            }else{
+                                descPacoima = true;
+                                dllDescPacoima = descuento;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                        
+                    }else if(descuentosLabel[i] == 'Viajero Frecuente'){
+                        if(tipoDeViaje == "Normal"){
+                            if(pasajeros[i].clienteFrecuente == "false"){
+                                alert('Para el cliente '+pasajeros[i].nombre+' no aplica el descuento '+'Viajero Frecuente');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                    }else if(descuentosLabel[i] == 'Pronto Pago'){
+                        
+                        if(tipoDeViaje == "Normal"){
+                            //Este descuento aplica para las personas que relizan su compra con 90 dias de anticipacion
+                            //Primero obtenemos la fecha del dia de hoy
+                            let comprobar = true;
+
+                            let hoy = new Date();
+                            let fechaviaje = generalData.detalles.dia;
+
+                            let arrDate = fechaviaje.split('-', 3);
+
+                            let choy = `${hoy.getFullYear()}-${hoy.getMonth()+1}-${hoy.getDate()}`;
+                            let cviaje = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
+
+                            console.log('choy', choy);
+                            console.log('cviaje', cviaje);
+
+                            var fecha1 = moment(choy);
+                            var fecha2 = moment(cviaje);
+
+                            let diasDeDiferencia = fecha2.diff(fecha1, 'days');
+
+                            console.log(fecha2.diff(fecha1, 'days'), ' dias de diferencia');
+
+                            if(diasDeDiferencia<90){
+                                alert(`La fecha de viaje será en ${diasDeDiferencia} dias. \n Dias minimos aceptados 90`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                    }
+                } catch (error) {
+                    
+                }
+                //
+                for (let j = 0; j < pasajeros.length; j++) {
+                    if((pasajeros[i].asiento == pasajeros[j].asiento) && (pasajeros[i].idCliente != pasajeros[j].idCliente)){
+                        alert('No puedes repetir asientos. Pasajeros: '+pasajeros[i].nombre+' y '+pasajeros[j].nombre);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }else{
+            alert('Faltan asientos por llenar');
+            return false
+        }
+    }
+
+    comprobarRangoDeFecha(fechaAnterior, fechaPosterior, FechaActual){
+
+        if(FechaActual >= fechaAnterior && fechaAnterior <= fechaPosterior){
+            console.log('Se encuentra entre el rango de fechas');
+            return true
+        }else{
+            console.log('NO Se encuentra entre el rango de fechas');
+            return false
+        }
+    }
+
+    componentDidMount(){
+        pasajeros = [];
+    }
+
+    actualizar(){
+        this.fetchUser();
+        this.verificarAsientosSeleccionados();
+
+        this.setState({
+            validationActualizar: true
+        });
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+        modal: !prevState.modal
+        }));
+    }
+
+    //Sacamos datos del vendedor y sus descuentos disponibles
+    fetchUser(){
+        fetch(`/api/Usuarios/${generalData.vendedor.username}/descuentosVenta`)
+          .then(res => res.json())
+          .then(data => {
+              console.log('descuentos', data);
+              generalData.vendedor.id_Usuario = data.usuario.id_Usuario;
+              generalData.vendedor.nombre = `${data.usuario.nombre} ${data.usuario.apellidoPaterno} ${data.usuario.apellidoMaterno}`;
+              generalData.vendedor.apellidoPaterno = data.usuario.apellidoPaterno;
+              generalData.vendedor.apellidoMaterno = data.usuario.apellidoMaterno;
+              generalData.vendedor.sucursal = data.usuario.sucursal;
+              generalData.vendedor.tipoDescuento = data.usuario.tipoDescuento;
+              ///////////////SUCURSAL
+              generalData.sucursalVendedor.direccion = data.sucursal.direccion;
+              generalData.sucursalVendedor.tel =  data.sucursal.tel;
+              generalData.sucursalVendedor.tel2 = data.sucursal.tel2;
+              generalData.sucursalVendedor.correo = data.sucursal.correo;
+              generalData.sucursalVendedor.nombre = data.sucursal.nombre;
+              //////////////DESCUENTOS
+              console.log('descuentos', data.descuentos);
+              this.setState({
+                optDescuento : data.descuentos
+              })
+              
+          })
+    }
+
+    verificarAsientosSeleccionados(){
+        let auxAsientosPorOcupar = '';
+        asientos = [];
+        props = [];
+        //console.log('asientosSelected',generalData.asientosSelected);
+        for (const prop in generalData.asientosSelected) {
+            if(prop == 'selected1'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(1);
+                    auxAsientosPorOcupar+='1, '
+                }
+            }
+            if(prop == 'selected2'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(2);
+                    auxAsientosPorOcupar+='2, '
+                }
+            }
+            if(prop == 'selected3'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(3);
+                    auxAsientosPorOcupar+='3, '
+                }
+            }
+            if(prop == 'selected4'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(4);
+                    auxAsientosPorOcupar+='4, '
+                }
+            }
+            if(prop == 'selected5'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(5);
+                    auxAsientosPorOcupar+='5, '
+                }
+            }
+            if(prop == 'selected6'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(6);
+                    auxAsientosPorOcupar+='6, '
+                }
+            }
+            if(prop == 'selected7'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(7);
+                    auxAsientosPorOcupar+='7, '
+                }
+            }
+            if(prop == 'selected8'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(8);
+                    auxAsientosPorOcupar+='8, '
+                }
+            }
+            if(prop == 'selected9'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(9);
+                    auxAsientosPorOcupar+='9, '
+                }
+            }
+            if(prop == 'selected10'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(10);
+                    auxAsientosPorOcupar+='10, '
+                }
+            }
+            if(prop == 'selected11'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(11);
+                    auxAsientosPorOcupar+='11, '
+                }
+            }
+            if(prop == 'selected12'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(12);
+                    auxAsientosPorOcupar+='12, '
+                }
+            }
+            if(prop == 'selected13'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(13);
+                    auxAsientosPorOcupar+='13, '
+                }
+            }
+            if(prop == 'selected14'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(14);
+                    auxAsientosPorOcupar+='14, '
+                }
+            }
+            if(prop == 'selected15'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(15);
+                    auxAsientosPorOcupar+='15, '
+                }
+            }
+            if(prop == 'selected16'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(16);
+                    auxAsientosPorOcupar+='16, '
+                }
+            }
+            if(prop == 'selected17'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(17);
+                    auxAsientosPorOcupar+='17, '
+                }
+            }
+            if(prop == 'selected18'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(18);
+                    auxAsientosPorOcupar+='18, '
+                }
+            }
+            if(prop == 'selected19'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(19);
+                    auxAsientosPorOcupar+='19, '
+                }
+            }
+            if(prop == 'selected20'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(20);
+                    auxAsientosPorOcupar+='20, '
+                }
+            }
+            if(prop == 'selected21'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(21);
+                    auxAsientosPorOcupar+='21, '
+                }
+            }
+            if(prop == 'selected22'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(22);
+                    auxAsientosPorOcupar+='22, '
+                }
+            }
+            if(prop == 'selected23'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(23);
+                    auxAsientosPorOcupar+='23, '
+                }
+            }
+            if(prop == 'selected24'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(24);
+                    auxAsientosPorOcupar+='24, '
+                }
+            }
+            if(prop == 'selected25'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(25);
+                    auxAsientosPorOcupar+='25, '
+                }
+            }
+            if(prop == 'selected26'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(26);
+                    auxAsientosPorOcupar+='26, '
+                }
+            }
+            if(prop == 'selected27'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(27);
+                    auxAsientosPorOcupar+='27, '
+                }
+            }
+            if(prop == 'selected28'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(28);
+                    auxAsientosPorOcupar+='28, '
+                }
+            }
+            if(prop == 'selected29'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(29);
+                    auxAsientosPorOcupar+='29, '
+                }
+            }
+            if(prop == 'selected30'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(30);
+                    auxAsientosPorOcupar+='30, '
+                }
+            }
+            if(prop == 'selected31'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(31);
+                    auxAsientosPorOcupar+='31, '
+                }
+            }
+            if(prop == 'selected32'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(32);
+                    auxAsientosPorOcupar+='32, '
+                }
+            }
+            if(prop == 'selected33'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(33);
+                    auxAsientosPorOcupar+='33, '
+                }
+            }
+            if(prop == 'selected34'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(34);
+                    auxAsientosPorOcupar+='34, '
+                }
+            }
+            if(prop == 'selected35'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(35);
+                    auxAsientosPorOcupar+='35, '
+                }
+            }
+            if(prop == 'selected36'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(36);
+                    auxAsientosPorOcupar+='36, '
+                }
+            }
+            if(prop == 'selected37'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(37);
+                    auxAsientosPorOcupar+='37, '
+                }
+            }
+            if(prop == 'selected38'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(38);
+                    auxAsientosPorOcupar+='38, '
+                }
+            }
+            if(prop == 'selected39'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(39);
+                    auxAsientosPorOcupar+='39, '
+                }
+            }
+            if(prop == 'selected40'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(40);
+                    auxAsientosPorOcupar+='40, '
+                }
+            }
+            if(prop == 'selected41'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(41);
+                    auxAsientosPorOcupar+='41, '
+                }
+            }
+            if(prop == 'selected42'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(42);
+                    auxAsientosPorOcupar+='42, '
+                }
+            }
+            if(prop == 'selected43'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(43);
+                    auxAsientosPorOcupar+='43, '
+                }
+            }
+            if(prop == 'selected44'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(44);
+                    auxAsientosPorOcupar+='44, '
+                }
+            }
+            if(prop == 'selected45'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(45);
+                    auxAsientosPorOcupar+='45, '
+                }
+            }
+            if(prop == 'selected46'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(46);
+                    auxAsientosPorOcupar+='46, '
+                }
+            }
+            if(prop == 'selected47'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(47);
+                    auxAsientosPorOcupar+='47, '
+                }
+            }
+            if(prop == 'selected48'){
+                if(generalData.asientosSelected[prop]){
+                    props.push(generalData.asientosSelected[prop]);
+                    asientos.push(48);
+                    auxAsientosPorOcupar+='48, '
+                }
+            }
+        }
+        this.setState({
+            clientes: props
+        });
+        generalData.noPasajeros = props.length;
+
+        //Validamos el descuento familiar en caso de que se haya seleccionado
+        if(tipoDeViaje=="Familiar" && props.length < 5){
+            alert('Para ser acreedor del descuento familiar necesitas 5 o más pasajeros');
+        }
+
+        this.setState({
+            asientosPorOcupar: auxAsientosPorOcupar
+        })
+
+        console.log('props',props);
+        console.log('asientos',asientos);
+    }
+
+    handleOnChangeAsiento(e){
+        let index = e.target.id;
+        let value = e.target.value;
+        console.log('index', e.target.id);
+        console.log('asiento', e.target.value);
+        pasajeros[index].asiento = value;
+        this.setState({
+            pasajeros: pasajeros
+        })
+    }
+
+    handleOnChangeRazon(e){
+        let index = e.target.id;
+        let value = e.target.value;
+        console.log('index', e.target.id);
+        console.log('razon', e.target.value);
+        razones[index].razon = value;
+    }
+    
+    handleOnChangeDescuento(e){
+        let i = e.target.selectedIndex;
+        let tex = (e.target.options[i].text);
+        let index = e.target.id;
+        descuentos[index].descuento = (descPacoima)? 0 :  e.target.value;
+        descuentosLabel[index] = tex;
+    }
+
+    handleOnChangeNombreBusqueda(e){
+        this.setState({
+            nombreBusqueda: e.target.value
+        })
+    }
+
+    handleOnChangeApaternoBusqueda(e){
+        this.setState({
+            apaternoBusqueda: e.target.value
+        })
+    }
+
+    handleOnChangeAmaternoBusqueda(e){
+        this.setState({
+            amaternoBusqueda: e.target.value
+        })
+    }
+
+    handleAddPasajero(idCliente, NombreCliente, listaNegra, clienteFrecuente, tipo, type){
+        if(asientos.length == pasajeros.length){
+            alert('No puedes agregar más pasajeros');
+        }else{
+            if(listaNegra == 'true'){
+                alert('Ver detalle en lista Negra para este cliente');
+            }
+            pasajeros.push({
+                'asiento': 0,
+                'idCliente': idCliente,
+                'nombre': NombreCliente,
+                'tipoDeCliente': tipo,
+                'clienteFrecuente': clienteFrecuente,
+                'typeClient': type
+            });
+
+            razones.push({
+                'razon': 'razon'
+            });
+
+            descuentos.push({
+                'descuento': 0
+            });
+
+            descuentosLabel.push('');
+
+            this.setState({
+                pasajeros: pasajeros
+            });
+        }
+    }
+
+    deletePasajero(nombre, index){
+        if (confirm('En verdad desea quitar al pasajero '+nombre)) {
+            pasajeros.splice(index, 1);
+            descuentos.splice(index, 1);
+            razones.splice(index, 1);
+            descuentosLabel.splice(index, 1);
+            this.setState({
+                pasajeros: pasajeros
+            });
+        }
+    }
+
+    //Buscamos los pasajeros que coincidan con lo que introdujo el vendedor
+    buscarPasajeros(){
+        let nom = 'null';
+        let ap = 'null';
+        let am = 'null';
+
+        if(this.state.nombreBusqueda != ''){
+            nom = this.state.nombreBusqueda
+        }
+
+        if(this.state.apaternoBusqueda != ''){
+            ap = this.state.apaternoBusqueda
+        }
+
+        if(this.state.amaternoBusqueda != ''){
+            am = this.state.amaternoBusqueda
+        }
+
+        fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({
+                resultPasajeros: data
+            })
+          })
+          .then(() => {
+              console.log('resultPasajeros', this.state.resultPasajeros);
+          } )
+    }
+
+    actualizarListaClientes(clienteNuevo){
+        let tipo = '';
+        if(clienteNuevo.type == 'Niño'){
+            tipo = 'nino';
+        }else if(clienteNuevo.type == 'INSEN'){
+            tipo = 'adultoM';
+        }else if(clienteNuevo.type == 'Adulto'){
+            tipo = 'adulto';
+        }
+        this.handleAddPasajero(clienteNuevo.value, clienteNuevo.name, clienteNuevo.listaNegra, clienteNuevo.clienteFrecuente, tipo ,clienteNuevo.type);
+    }
+
+    render () {
+        return (
+            <div>
+                <br/>
+                <Row>
+                    <Col lg='12' md='12' sm='12' xs='12' className="text-center">
+                        <Button onClick={this.actualizar} size="lg" outline color="info">Actualizar</Button>
+                    </Col>
+                </Row>
+                <br/>
+                <Row>
+                {
+                    (generalData.vendedor.seguridad == 'Admin')?
+                    <Col lg='12' md='12' sm='12' xs='12' className="text-center">
+                        <p className="text-center">Vendedor: { (this.state.validationActualizar)? generalData.vendedor.nombre : '' }</p>
+                    </Col>
+                    :
+                    ''
+                }
+                </Row>
+                {
+                    (this.state.validationActualizar)?
+                    <div>
+                        <Row>
+                            <Col lg='8' md='8' sm='8' xs='8'>
+                                <h5>Buscar Pasajero:</h5>
+                                <Form inline>
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeNombreBusqueda} type="text" placeholder="Nombre" />
+                                    </FormGroup>
+                                    {' '}
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido Paterno" />
+                                    </FormGroup>
+                                    {' '}
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeAmaternoBusqueda} type="text" id="busquedaPasajero" placeholder="Apellido Materno"/>
+                                        <InputGroupAddon addonType="append"><Button onClick={this.buscarPasajeros} color="secondary"><i className="fa fa-search"/></Button></InputGroupAddon>
+                                    </FormGroup>
+                                    {' '}
+                                </Form>
+                            </Col>
+                            <Col className="btn-nuevoPasajero" lg='4' md='4' sm='4' xs='4'>
+                                <Button color="primary" onClick={this.toggle}>Nuevo Pasajero <i className="fa fa-user-plus"/></Button>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda:</h5></Col>
+                            <Col lg='6' md='6' sm='12' xs='12'>
+                                <span className="dot nino"></span>{' Niño '}<span className="dot adulto"></span>{' Adulto '}<span className="dot adultoM"></span>{' Adulto Mayor '}
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='12' md='12' sm='12' xs='12'>
+                                <Table responsive hover>
+                                    <thead>
+                                        <tr>
+                                        <th className="text-center">+</th>
+                                        <th>Nombre</th>
+                                        <th>Fecha de Nacimiento</th>
+                                        <th>Teléfono</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.resultPasajeros.map((pasajero, i) => 
+                                        <tr key={i}>
+                                            <td className="text-center">
+                                                <Button className="btn-sm" color="success" onClick={() => this.handleAddPasajero(pasajero.value, pasajero.name, pasajero.listaNegra, pasajero.clienteFrecuente, pasajero.simbologia, pasajero.type)}><i className="fa fa-plus"/></Button>
+                                            </td>
+                                            <td><span className={'dot '+pasajero.simbologia}/>{' '+pasajero.name}</td>
+                                            <td>{pasajero.label}</td>
+                                            <td>{pasajero.telefono}</td>
+                                        </tr>)}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='12' md='12' sm='12' xs='12'>
+                                <h5>Pasajero(s) en esta venta:</h5>
+                                <p>Asiento(s) por ocupar: {this.state.asientosPorOcupar}</p>
+                                <Table responsive hover>
+                                    <thead>
+                                        <tr>
+                                            <th>Pasajero</th>
+                                            <th>Asiento</th>
+                                            <th>Razón</th>
+                                            <th>Descuento</th>
+                                            <th className="text-center">Quitar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.pasajeros.map((client, i) => 
+                                        <tr key={`${i}-${client.idCliente}`}>
+                                            <td><span className={'dot '+client.tipoDeCliente}/>{' '+client.nombre}</td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeAsiento} class="form-control">
+                                                    <option value={0}>Asiento</option>
+                                                    {asientos.map((asiento, j) => 
+                                                        <option key={`${i}-${asiento}`} value={asiento}>{asiento}</option>
+                                                    )}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeRazon} class="form-control">
+                                                    <option value="razon">Razón</option>
+                                                    <option value="Ciudadano">Ciudadano</option>
+                                                    <option value="Residente">Residente</option>
+                                                    <option value="Turista">Turista</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeDescuento} class="form-control">
+                                                    {this.state.optDescuento.map((descuento, i) => 
+                                                        <option key={`${i}-${descuento.label}`} value={descuento.desc}>{descuento.label}</option>
+                                                    )}
+                                                </select>
+                                            </td>
+                                            <td className="text-center"><Button name={client.nombre} className="btn-sm" color="danger" onClick={() => this.deletePasajero(client.nombre, i)}><i className="fa fa-trash-alt"/></Button></td>
+                                        </tr>)}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                    </div>
+                    :
+                    ''
+                }
+                {/* MODAL NUEVO CLIENTE */}
+                <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Nuevo Cliente</ModalHeader>
+                    <WizardCliente toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
+                </Modal>
+                {/* FIN MODAL NUEVO CLIENTE */}
+            </div>
+        )
+    }
+}
+
+class FourthStep extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+          hora: '00:00',
+          validationOrigenRegreso: true,
+          validationDestinoRegreso: true,
+          validationFechaHoraRegreso: true,
+          validationCorridaRegreso: true,
+          optOrigen: [],
+        };
+
+        this.handleSetOptionsDestino = this.handleSetOptionsDestino.bind(this);
+        this.handleChangeOrigen = this.handleChangeOrigen.bind(this);
+        this.handleSetOptionsOrigen = this.handleSetOptionsOrigen.bind(this);
+        this.handleChangeDestino = this.handleChangeDestino.bind(this);
+        this.handleChangeFechaHora = this.handleChangeFechaHora.bind(this);
+        this.handleChangeCorrida = this.handleChangeCorrida.bind(this);
+
+        this.getDiaDelAnio = this.getDiaDelAnio.bind(this);
+    }
+
+    componentDidMount(){
+      this.handleSetOptionsOrigen();
+    }
+
+    isValidated() {
+        if(generalDataR.origen.id == null){
+            this.setState({
+              validationOrigenRegreso: false
+            })
+        }
+
+        if(generalDataR.destino.id == null){
+            this.setState({
+              validationDestinoRegreso: false
+            })
+        }
+
+        if(generalDataR.detalles.idViaje == null){
+            this.setState({
+                validationCorridaRegreso: false
+            })
+        }
+
+
+        if(generalDataR.origen.id == null || generalDataR.destino.id == null || generalDataR.detalles.dia == null || generalDataR.detalles.idViaje == null || !this.state.validationFechaHoraRegreso){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    handleSetOptionsOrigen(){
+      let optOrigenR = [];
+      fetch('/api/OrigenesYdestinos/')
+      .then(res => res.json())
+      .then(data => {
+          if(data.length > 0){
+              for(let i = 0; i < data.length; i++){
+                optOrigenR[i] = {
+                    value: data[i]._id,
+                    label: data[i].municipio,
+                    estado: data[i].estado,
+                    pais: data[i].pais,
+                    direccion: data[i].direccion,
+                    hora: data[i].horaDeCita
+                };
+              }
+              this.setState({
+                  optOrigen: optOrigenR
+              })
+          }
+      });
+    }
+
+    handleChangeOrigen(e){
+      //console.log(e);
+      generalDataR.origen.id = e.value;
+      generalDataR.origen.ciudad = e.label;
+      generalDataR.origen.estado = e.estado;
+      generalDataR.origen.pais = e.pais;
+      generalDataR.origen.direccion = e.direccion;
+      generalDataR.detalles.hora = e.hora;
+      this.setState({
+          validationOrigenRegreso: true,
+          hora: e.hora
+      });
+      //console.log(generalData.origen.id);
+      let pais = (e.pais == 'MX')? 'US' : 'MX';
+      //this.handleSetOptionsDestino(pais);
+      this.handleSetOptionsDestino(e.value);
+    }
+
+    handleSetOptionsDestino(idOrigen){
+      //Sacamos los destinos que estén guardados en los precios para ese origen
+      //console.log(idOrigen);
+      fetch(`/api/Precios/destinos/${idOrigen}`)
+      .then(res => res.json())
+      .then(data => {
+          this.setState({
+              optDestino: data
+          })
+      });
+    }
+
+    handleChangeDestino(e){
+      generalDataR.destino.id = e.value;
+      generalDataR.destino.ciudad = e.label;
+      generalDataR.destino.estado = e.estado;
+      generalDataR.destino.pais = e.pais;
+      generalDataR.destino.direccion = e.direccion;
+      this.setState({
+        validationDestinoRegreso: true
+      })
+      //console.log(generalData.destino.id);
+    }
+
+    handleChangeFechaHora(e){
+
+      let selectFechaHora = document.getElementById('selectFechaHora');
+
+      let fechaDeViaje = e.target.value;             
+      let arrayFechaDeViaje = fechaDeViaje.split('-', 3);
+      let anioFechaDeViaje = arrayFechaDeViaje[0];
+
+      let hoy = new Date();
+      let anio = hoy.getFullYear();
+
+      let diaDeHoy = `${anio}-${hoy.getMonth()+1}-${hoy.getDate()}`;
+      let diaAnioHoy = this.getDiaDelAnio(`${anio}-01-01`,diaDeHoy);
+
+      //console.log('diaAnioHoy', diaAnioHoy);
+
+      let diaAnioViaje = this.getDiaDelAnio(`${anioFechaDeViaje}-01-01`,fechaDeViaje);
+
+      //console.log('diaAnioViaje', diaAnioViaje);
+
+      if((anioFechaDeViaje < anio) || ((anioFechaDeViaje == anio) && (diaAnioViaje<diaAnioHoy))){//si el anio que seleccionamos es menor al año actual, retornamos false
+          this.setState({
+              validationFechaHoraRegreso: false,
+          });
+          selectFechaHora.value = '';
+          return false;
+      }else{
+          //Ahora verificamos que ya esté abierta la fecha
+          //El formato de la fecha debe ser "dd-mm-aaaa"
+          let buscarFecha = `${arrayFechaDeViaje[2]}-${arrayFechaDeViaje[1]}-${arrayFechaDeViaje[0]}`;
+          fetch(`/api/AsignarViajes/${generalDataR.origen.id}/${generalDataR.destino.id}/${buscarFecha}`)
+          .then(res => res.json())
+          .then(data => {
+              if(data.length > 0){
+                  this.setState({
+                      optCorridas: data,
+                      validationFechaHoraRegreso: true,
+                  });
+              }else{
+                  this.setState({
+                      validationFechaHoraRegreso: false,
+                  });
+                  selectFechaHora.value = '';
+                  alert('No hay viaje que coincida, escoge otra fecha o contáctate con la matriz');
+              }
+          });
+      }
+    }
+
+    handleChangeCorrida(e){
+        generalDataR.detalles.idViaje =  e.value;
+        generalDataR.detalles.dia = e.dia;
+        generalDataR.detalles.numeroEconomico = e.numeroEconomico;
+        generalDataR.detalles.anio = e.anio;
+        generalDataR.detalles.diaDelAnio = e.diaDelAnio;
+        this.setState({
+            validationCorridaRegreso: true,
+        });
+    }
+
+    getDiaDelAnio(fechaInicial, fechaFinal){
+
+        let fechaini = new Date(fechaInicial);
+        let fechafin = new Date(fechaFinal);
+        let diasdif= fechafin.getTime()-fechaini.getTime();
+        let contdias = Math.round(diasdif/(1000*60*60*24));
+
+        return (contdias+1);
+    }
+
+    render () {
+        return (
+          <div>
+            <br/>
+            <Row>
+                <Col lg={6} md={6} sm={12} xs={12}>
+                    <Label for="selectOrigen">Origen:</Label>
+                    <div class={(this.state.validationOrigenRegreso) ? 'card border-light': 'card border-danger'}>
+                        <Select
+                        id="selectOrigen"
+                        onChange={this.handleChangeOrigen}
+                        options={this.state.optOrigen}
+                        placeholder = "Selecciona..."
+                        />
+                    </div>
+                    <p class={(this.state.validationOrigenRegreso) ? 'textValid': 'textInvalid'}>Selecciona el origen</p>
+                </Col>
+                <Col lg={6} md={6} sm={12} xs={12}>          
+                    <Label for="selectDestino">Destino:</Label>
+                    <div class={(this.state.validationDestinoRegreso) ? 'card border-light': 'card border-danger'}>
+                        <Select
+                        id="selectDestino"
+                        onChange={this.handleChangeDestino}
+                        options={this.state.optDestino}
+                        placeholder = "Selecciona..."
+                        />
+                    </div>
+                    <p class={(this.state.validationDestinoRegreso) ? 'textValid': 'textInvalid'}>Selecciona el destino</p>
+                </Col>
+            </Row>
+            <br/>
+            <Row form> 
+                <Col lg={6} md={6} sm={12} xs={12}>
+                    <Label for="selectFechaHora">Fecha:</Label>
+                    <div class={(this.state.validationFechaHoraRegreso) ? 'card border-light': 'card border-danger'}>
+                        <Input
+                            type="date"
+                            name="date"
+                            id="selectFechaHora"
+                            placeholder="date placeholder"
+                            onChange={this.handleChangeFechaHora}
+                        />
+                    </div>
+                    <p class={(this.state.validationFechaHoraRegreso) ? 'textValid': 'textInvalid'}>Selecciona la fecha</p>
+                </Col>
+                <Col lg={6} md={6} sm={12} xs={12}>                    
+                    <Label for="selectCorrida">Corrida:</Label>
+                    <div class={(this.state.validationCorridaRegreso) ? 'card border-light': 'card border-danger'}>
+                        <Select
+                        id="selectCorrida"
+                        onChange={this.handleChangeCorrida}
+                        options={this.state.optCorridas}
+                        placeholder = "Selecciona..."
+                        />
+                    </div>
+                    <p class={(this.state.validationCorridaRegreso) ? 'textValid': 'textInvalid'}>Selecciona la corrida</p>
+                </Col>
+                
+            </Row>
+            <br/>
+            <Row form>
+                <Col lg={6} md={6} sm={12} xs={12}>
+                    <Label >Hora:</Label>
+                    <Input plaintext value={this.state.hora} readOnly/>
+                </Col>
+            </Row>
+        </div>
+        )
+    }
+}
+
+class FiveStep extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            comprobar: false,
+            noAsiento: null,
+            noAsientos: null,
+            cont: 0,
+            //Asientos
+            asiento1: null,
+            asiento2: null,
+            asiento3: null,
+            asiento4: null,
+            asiento5: null,
+            asiento6: null,
+            asiento7: null,
+            asiento8: null,
+            asiento9: null,
+            asiento10: null,
+            asiento11: null,
+            asiento12: null,
+            asiento13: null,
+            asiento14: null,
+            asiento15: null,
+            asiento16: null,
+            asiento17: null,
+            asiento18: null,
+            asiento19: null,
+            asiento20: null,
+            asiento21: null,
+            asiento22: null,
+            asiento23: null,
+            asiento24: null,
+            asiento25: null,
+            asiento26: null,
+            asiento27: null,
+            asiento28: null,
+            asiento29: null,
+            asiento30: null,
+            asiento31: null,
+            asiento32: null,
+            asiento33: null,
+            asiento34: null,
+            asiento35: null,
+            asiento36: null,
+            asiento37: null,
+            asiento38: null,
+            asiento39: null,
+            asiento40: null,
+            asiento41: null,
+            asiento42: null,
+            //FIN Asientos
+            //IS SELECTED VARS
+            selected1: false,
+            selected2: false,
+            selected3: false,
+            selected4: false,
+            selected5: false,
+            selected6: false,
+            selected7: false,
+            selected8: false,
+            selected9: false,
+            selected10: false,
+            selected11: false,
+            selected12: false,
+            selected13: false,
+            selected14: false,
+            selected15: false,
+            selected16: false,
+            selected17: false,
+            selected18: false,
+            selected19: false,
+            selected20: false,
+            selected21: false,
+            selected22: false,
+            selected23: false,
+            selected24: false,
+            selected25: false,
+            selected26: false,
+            selected27: false,
+            selected28: false,
+            selected29: false,
+            selected30: false,
+            selected31: false,
+            selected32: false,
+            selected33: false,
+            selected34: false,
+            selected35: false,
+            selected36: false,
+            selected37: false,
+            selected38: false,
+            selected39: false,
+            selected40: false,
+            selected41: false,
+            selected42: false,
+            //GENERO VALUE
+            genero1: false,
+            genero2: false,
+            genero3: false,
+            genero4: false,
+            genero5: false,
+            genero6: false,
+            genero7: false,
+            genero8: false,
+            genero9: false,
+            genero10: false,
+            genero11: false,
+            genero12: false,
+            genero13: false,
+            genero14: false,
+            genero15: false,
+            genero16: false,
+            genero17: false,
+            genero18: false,
+            genero19: false,
+            genero20: false,
+            genero21: false,
+            genero22: false,
+            genero23: false,
+            genero24: false,
+            genero25: false,
+            genero26: false,
+            genero27: false,
+            genero28: false,
+            genero29: false,
+            genero30: false,
+            genero31: false,
+            genero32: false,
+            genero33: false,
+            genero34: false,
+            genero35: false,
+            genero36: false,
+            genero37: false,
+            genero38: false,
+            genero39: false,
+            genero40: false,
+            genero41: false,
+            genero42: false,
+
+            //FIN IS SELECTED VARS
+        }
+        this.handleClickComprobar = this.handleClickComprobar.bind(this);
+        this.handleSelectAsiento = this.handleSelectAsiento.bind(this);
+        //this.selectSeat = this.selectSeat.bind(this);
+        this.fetchCamion = this.fetchCamion.bind(this);
+        this.fetchAsientos = this.fetchAsientos.bind(this);
+        this.fetchUsuario = this.fetchUsuario.bind(this);
+        this.fetchApartados = this.fetchApartados.bind(this);
+    }
+
+    handleClickComprobar(){
+        //Primero sacamos la capacidad del camión.
+        //this.fetchCamion();
+        this.fetchAsientos();
+        this.setState({
+            comprobar: true
+        })
+    }
+
+    fetchCamion(){
+        //console.log(generalData.detalles.numeroEconomico);
+        fetch('/api/Camiones/'+generalDataR.detalles.numeroEconomico+'/no')
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                noAsientos: data[0].capacidad
+            })
+        })
+        .then(() => {
+            this.fetchAsientos();
+        });
+    }
+
+    fetchCorrida(){
+        fetch('/api/Camiones/'+generalDataR.detalles.numeroEconomico+'/no')
+        .then(res => res.json())
+        .then(data => {
+            this.setState({
+                noAsientos: data[0].capacidad
+            })
+        })
+        .then(() => {
+            this.fetchAsientos();
+        });
+    }
+
+    fetchAsientos(){
+        console.log(`/api/AsignarViajes/${generalDataR.detalles.idViaje}/asientosVenta`);
+        fetch(`/api/AsignarViajes/${generalDataR.detalles.idViaje}/asientosVenta`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({
+              noAsientos: data.capacidad,
+              //ASIENTOS//////////////////////////////
+              asiento1: data.asientos.asiento_1.status,
+              asiento2: data.asientos.asiento_2.status,
+              asiento3: data.asientos.asiento_3.status,
+              asiento4: data.asientos.asiento_4.status,
+              asiento5: data.asientos.asiento_5.status,
+              asiento6: data.asientos.asiento_6.status,
+              asiento7: data.asientos.asiento_7.status,
+              asiento8: data.asientos.asiento_8.status,
+              asiento9: data.asientos.asiento_9.status,
+              asiento10: data.asientos.asiento_10.status,
+              asiento11: data.asientos.asiento_11.status,
+              asiento12: data.asientos.asiento_12.status,
+              asiento13: data.asientos.asiento_13.status,
+              asiento14: data.asientos.asiento_14.status,
+              asiento15: data.asientos.asiento_15.status,
+              asiento16: data.asientos.asiento_16.status,
+              asiento17: data.asientos.asiento_17.status,
+              asiento18: data.asientos.asiento_18.status,
+              asiento19: data.asientos.asiento_19.status,
+              asiento20: data.asientos.asiento_20.status,
+              asiento21: data.asientos.asiento_21.status,
+              asiento22: data.asientos.asiento_22.status,
+              asiento23: data.asientos.asiento_23.status,
+              asiento24: data.asientos.asiento_24.status,
+              asiento25: data.asientos.asiento_25.status,
+              asiento26: data.asientos.asiento_26.status,
+              asiento27: data.asientos.asiento_27.status,
+              asiento28: data.asientos.asiento_28.status,
+              asiento29: data.asientos.asiento_29.status,
+              asiento30: data.asientos.asiento_30.status,
+              asiento31: data.asientos.asiento_31.status,
+              asiento32: data.asientos.asiento_32.status,
+              asiento33: data.asientos.asiento_33.status,
+              asiento34: data.asientos.asiento_34.status,
+              asiento35: data.asientos.asiento_35.status,
+              asiento36: data.asientos.asiento_36.status,
+              asiento37: data.asientos.asiento_37.status,
+              asiento38: data.asientos.asiento_38.status,
+              asiento39: data.asientos.asiento_39.status,
+              asiento40: data.asientos.asiento_40.status,
+              asiento41: data.asientos.asiento_41.status,
+              asiento42: data.asientos.asiento_42.status,
+              asiento43: data.asientos.asiento_43.status,
+              asiento44: data.asientos.asiento_44.status,
+              asiento45: data.asientos.asiento_45.status,
+              asiento46: data.asientos.asiento_46.status,
+              asiento47: data.asientos.asiento_47.status,
+              asiento48: data.asientos.asiento_48.status,
+              //GENERO/////////////////////////////////
+              genero1: data.asientos.asiento_1.genero,
+              genero2: data.asientos.asiento_2.genero,
+              genero3: data.asientos.asiento_3.genero,
+              genero4: data.asientos.asiento_4.genero,
+              genero5: data.asientos.asiento_5.genero,
+              genero6: data.asientos.asiento_6.genero,
+              genero7: data.asientos.asiento_7.genero,
+              genero8: data.asientos.asiento_8.genero,
+              genero9: data.asientos.asiento_9.genero,
+              genero10: data.asientos.asiento_10.genero,
+              genero11: data.asientos.asiento_11.genero,
+              genero12: data.asientos.asiento_12.genero,
+              genero13: data.asientos.asiento_13.genero,
+              genero14: data.asientos.asiento_14.genero,
+              genero15: data.asientos.asiento_15.genero,
+              genero16: data.asientos.asiento_16.genero,
+              genero17: data.asientos.asiento_17.genero,
+              genero18: data.asientos.asiento_18.genero,
+              genero19: data.asientos.asiento_19.genero,
+              genero20: data.asientos.asiento_20.genero,
+              genero21: data.asientos.asiento_21.genero,
+              genero22: data.asientos.asiento_22.genero,
+              genero23: data.asientos.asiento_23.genero,
+              genero24: data.asientos.asiento_24.genero,
+              genero25: data.asientos.asiento_25.genero,
+              genero26: data.asientos.asiento_26.genero,
+              genero27: data.asientos.asiento_27.genero,
+              genero28: data.asientos.asiento_28.genero,
+              genero29: data.asientos.asiento_29.genero,
+              genero30: data.asientos.asiento_30.genero,
+              genero31: data.asientos.asiento_31.genero,
+              genero32: data.asientos.asiento_32.genero,
+              genero33: data.asientos.asiento_33.genero,
+              genero34: data.asientos.asiento_34.genero,
+              genero35: data.asientos.asiento_35.genero,
+              genero36: data.asientos.asiento_36.genero,
+              genero37: data.asientos.asiento_37.genero,
+              genero38: data.asientos.asiento_38.genero,
+              genero39: data.asientos.asiento_39.genero,
+              genero40: data.asientos.asiento_40.genero,
+              genero41: data.asientos.asiento_41.genero,
+              genero42: data.asientos.asiento_42.genero,
+              genero43: data.asientos.asiento_43.genero,
+              genero44: data.asientos.asiento_44.genero,
+              genero45: data.asientos.asiento_45.genero,
+              genero46: data.asientos.asiento_46.genero,
+              genero47: data.asientos.asiento_47.genero,
+              genero48: data.asientos.asiento_48.genero,
+            })
+        }).then(()=>{
+            this.fetchUsuario();
+        });
+    }
+
+    fetchUsuario(){
+        fetch(`/api/Usuarios/${generalDataR.vendedor.username}`)
+            .then(res => res.json())
+            .then(data => {
+                //console.log(data);
+                generalDataR.vendedor.id_Usuario = data[0]._id;
+                generalDataR.vendedor.nombre = data[0].nombre;
+                generalDataR.vendedor.apellidoPaterno = data[0].apellidoPaterno;
+                generalDataR.vendedor.apellidoMaterno = data[0].apellidoMaterno;
+                generalDataR.vendedor.sucursal = data[0].sucursal;
+                generalDataR.vendedor.seguridad = data[0].seguridad;
+                generalDataR.vendedor.tipoDescuento = data[0].tipoDescuento;
+            }).then(() => {
+                this.fetchApartados();
+            })
+    }
+
+    fetchApartados(){
+        fetch('/api/Apartados/'+generalDataR.vendedor.id_Usuario+'/'+generalDataR.detalles.idViaje)
+        .then(res => res.json())
+        .then(data => {
+            if(data.length>0){
+                //console.log(data[0].asientos);
+                //let arrayAsientos = data[0].asientos;
+                for (let i = 0; i < data.length; i++) {
+                    if(data[i].asiento == 1){
+                        this.setState({
+                            asiento1: 'false',
+                            selected1: true
+                        });
+                        generalDataR.asientosSelected.selected1 = true;
+                    }
+                    if(data[i].asiento == 2){
+                        this.setState({
+                            asiento2: 'false',
+                            selected2: true
+                        });
+                        generalDataR.asientosSelected.selected2 = true;
+                    }
+                    if(data[i].asiento == 3){
+                        this.setState({
+                            asiento3: 'false',
+                            selected3: true
+                        });
+                        generalDataR.asientosSelected.selected3 = true;
+                    }
+                    if(data[i].asiento == 4){
+                        this.setState({
+                            asiento4: 'false',
+                            selected4: true
+                        });
+                        generalDataR.asientosSelected.selected4 = true;
+                    }
+                    if(data[i].asiento == 5){
+                        this.setState({
+                            asiento5: 'false',
+                            selected5: true
+                        });
+                        generalDataR.asientosSelected.selected5 = true;
+                    }
+                    if(data[i].asiento == 6){
+                        this.setState({
+                            asiento6: 'false',
+                            selected6: true
+                        });
+                        generalDataR.asientosSelected.selected6 = true;
+                    }
+                    if(data[i].asiento == 7){
+                        this.setState({
+                            asiento7: 'false',
+                            selected7: true
+                        });
+                        generalDataR.asientosSelected.selected7 = true;
+                    }
+                    if(data[i].asiento == 8){
+                        this.setState({
+                            asiento8: 'false',
+                            selected8: true
+                        });
+                        generalDataR.asientosSelected.selected8 = true;
+                    }
+                    if(data[i].asiento == 9){
+                        this.setState({
+                            asiento9: 'false',
+                            selected9: true
+                        });
+                        generalDataR.asientosSelected.selected9 = true;
+                    }
+                    if(data[i].asiento == 10){
+                        this.setState({
+                            asiento10: 'false',
+                            selected10: true
+                        });
+                        generalDataR.asientosSelected.selected10 = true;
+                    }
+                    if(data[i].asiento == 11){
+                        this.setState({
+                            asiento11: 'false',
+                            selected11: true
+                        });
+                        generalDataR.asientosSelected.selected11 = true;
+                    }
+                    if(data[i].asiento == 12){
+                        this.setState({
+                            asiento12: 'false',
+                            selected12: true
+                        });
+                        generalDataR.asientosSelected.selected12 = true;
+                    }
+                    if(data[i].asiento == 13){
+                        this.setState({
+                            asiento13: 'false',
+                            selected13: true
+                        });
+                        generalDataR.asientosSelected.selected13 = true;
+                    }
+                    if(data[i].asiento == 14){
+                        this.setState({
+                            asiento14: 'false',
+                            selected14: true
+                        });
+                        generalDataR.asientosSelected.selected14 = true;
+                    }
+                    if(data[i].asiento == 15){
+                        this.setState({
+                            asiento15: 'false',
+                            selected15: true
+                        });
+                        generalDataR.asientosSelected.selected15 = true;
+                    }
+                    if(data[i].asiento == 16){
+                        this.setState({
+                            asiento16: 'false',
+                            selected16: true
+                        });
+                        generalDataR.asientosSelected.selected16 = true;
+                    }
+                    if(data[i].asiento == 17){
+                        this.setState({
+                            asiento17: 'false',
+                            selected17: true
+                        });
+                        generalDataR.asientosSelected.selected17 = true;
+                    }
+                    if(data[i].asiento == 18){
+                        this.setState({
+                            asiento18: 'false',
+                            selected18: true
+                        });
+                        generalDataR.asientosSelected.selected18 = true;
+                    }
+                    if(data[i].asiento == 19){
+                        this.setState({
+                            asiento19: 'false',
+                            selected19: true
+                        });
+                        generalDataR.asientosSelected.selected19 = true;
+                    }
+                    if(data[i].asiento == 20){
+                        this.setState({
+                            asiento20: 'false',
+                            selected20: true
+                        });
+                        generalDataR.asientosSelected.selected20 = true;
+                    }
+                    if(data[i].asiento == 21){
+                        this.setState({
+                            asiento21: 'false',
+                            selected21: true
+                        });
+                        generalDataR.asientosSelected.selected21 = true;
+                    }
+                    if(data[i].asiento == 22){
+                        this.setState({
+                            asiento22: 'false',
+                            selected22: true
+                        });
+                        generalDataR.asientosSelected.selected22 = true;
+                    }
+                    if(data[i].asiento == 23){
+                        this.setState({
+                            asiento23: 'false',
+                            selected23: true
+                        });
+                        generalDataR.asientosSelected.selected23 = true;
+                    }
+                    if(data[i].asiento == 24){
+                        this.setState({
+                            asiento24: 'false',
+                            selected24: true
+                        });
+                        generalDataR.asientosSelected.selected24 = true;
+                    }
+                    if(data[i].asiento == 25){
+                        this.setState({
+                            asiento25: 'false',
+                            selected25: true
+                        });
+                        generalDataR.asientosSelected.selected25 = true;
+                    }
+                    if(data[i].asiento == 26){
+                        this.setState({
+                            asiento26: 'false',
+                            selected26: true
+                        });
+                        generalDataR.asientosSelected.selected26 = true;
+                    }
+                    if(data[i].asiento == 27){
+                        this.setState({
+                            asiento27: 'false',
+                            selected27: true
+                        });
+                        generalDataR.asientosSelected.selected27 = true;
+                    }
+                    if(data[i].asiento == 28){
+                        this.setState({
+                            asiento28: 'false',
+                            selected28: true
+                        });
+                        generalDataR.asientosSelected.selected28 = true;
+                    }
+                    if(data[i].asiento == 29){
+                        this.setState({
+                            asiento29: 'false',
+                            selected29: true
+                        });
+                        generalDataR.asientosSelected.selected29 = true;
+                    }
+                    if(data[i].asiento == 30){
+                        this.setState({
+                            asiento30: 'false',
+                            selected30: true
+                        });
+                        generalDataR.asientosSelected.selected30 = true;
+                    }
+                    if(data[i].asiento == 31){
+                        this.setState({
+                            asiento31: 'false',
+                            selected31: true
+                        });
+                        generalDataR.asientosSelected.selected31 = true;
+                    }
+                    if(data[i].asiento == 32){
+                        this.setState({
+                            asiento32: 'false',
+                            selected32: true
+                        });
+                        generalDataR.asientosSelected.selected32 = true;
+                    }
+                    if(data[i].asiento == 33){
+                        this.setState({
+                            asiento33: 'false',
+                            selected33: true
+                        });
+                        generalDataR.asientosSelected.selected33 = true;
+                    }
+                    if(data[i].asiento == 34){
+                        this.setState({
+                            asiento34: 'false',
+                            selected34: true
+                        });
+                        generalDataR.asientosSelected.selected34 = true;
+                    }
+                    if(data[i].asiento == 35){
+                        this.setState({
+                            asiento35: 'false',
+                            selected35: true
+                        });
+                        generalDataR.asientosSelected.selected35 = true;
+                    }
+                    if(data[i].asiento == 36){
+                        this.setState({
+                            asiento36: 'false',
+                            selected36: true
+                        });
+                        generalDataR.asientosSelected.selected36 = true;
+                    }
+                    if(data[i].asiento == 37){
+                        this.setState({
+                            asiento37: 'false',
+                            selected37: true
+                        });
+                        generalDataR.asientosSelected.selected37 = true;
+                    }
+                    if(data[i].asiento == 38){
+                        this.setState({
+                            asiento38: 'false',
+                            selected38: true
+                        });
+                        generalDataR.asientosSelected.selected38 = true;
+                    }
+                    if(data[i].asiento == 39){
+                        this.setState({
+                            asiento39: 'false',
+                            selected39: true
+                        });
+                        generalDataR.asientosSelected.selected39 = true;
+                    }
+                    if(data[i].asiento == 40){
+                        this.setState({
+                            asiento40: 'false',
+                            selected40: true
+                        });
+                        generalDataR.asientosSelected.selected40 = true;
+                    }
+                    if(data[i].asiento == 41){
+                        this.setState({
+                            asiento41: 'false',
+                            selected41: true
+                        });
+                        generalDataR.asientosSelected.selected41 = true;
+                    }
+                    if(data[i].asiento == 42){
+                        this.setState({
+                            asiento42: 'false',
+                            selected42: true
+                        });
+                        generalDataR.asientosSelected.selected42 = true;
+                    }
+                    if(data[i].asiento == 43){
+                        this.setState({
+                            asiento43: 'false',
+                            selected43: true
+                        });
+                        generalDataR.asientosSelected.selected43 = true;
+                    }
+                    if(data[i].asiento == 44){
+                        this.setState({
+                            asiento44: 'false',
+                            selected44: true
+                        });
+                        generalDataR.asientosSelected.selected44 = true;
+                    }
+                    if(data[i].asiento == 45){
+                        this.setState({
+                            asiento45: 'false',
+                            selected45: true
+                        });
+                        generalDataR.asientosSelected.selected45 = true;
+                    }
+                    if(data[i].asiento == 46){
+                        this.setState({
+                            asiento46: 'false',
+                            selected46: true
+                        });
+                        generalDataR.asientosSelected.selected46 = true;
+                    }
+                    if(data[i].asiento == 47){
+                        this.setState({
+                            asiento47: 'false',
+                            selected47: true
+                        });
+                        generalDataR.asientosSelected.selected47 = true;
+                    }
+                    if(data[i].asiento == 48){
+                        this.setState({
+                            asiento48: 'false',
+                            selected48: true
+                        });
+                        generalDataR.asientosSelected.selected48 = true;
+                    }
+                }
+            }
+        })
+    }
+
+    handleSelectAsiento(e){
+        let id = e.target.id || e.target.name;
+        //Primero verificamos que anteriormente no haya algun asiento ya seleccionado
+        //En caso de que ya este seleccionado alguno, procedemos a regresar a su estado original
+
+        generalDataR.detalles.noAsiento = id;
+        console.log(id);
+        let idVendedor = generalDataR.vendedor.id_Usuario;
+        let idViaje = generalDataR.detalles.idViaje;
+        let fecha = new Date();
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth();
+        let anio = fecha.getFullYear();
+        let fechaCreacion = `${dia}-${mes}-${anio}`;
+        let asiento = "";
+        console.log('generalDataR',generalDataR);
+        switch (id) {
+            case '1':
+                if(!this.state.selected1){//No está seleccionado el asiento
+                    asiento = "1";
+                    fetch(`/api/AsignarViajes/${idViaje}/1/${idVendedor}/Hola`, {
+                        method: 'PUT',
+                        body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(data => {
+                        console.log(data.update);
+                        let promiseData = data;
+                        if(promiseData.update != null){
+                            this.setState({
+                                selected1: true
+                            });
+                            generalDataR.asientosSelected.selected1 = true;
+                        }else{
+                            alert('El asiento está ocupado');
+                            this.setState({
+                                selected1: false
+                            });
+                            generalDataR.asientosSelected.selected1 = false;
+                        }
+                    }).catch(err => console.log(err));
+                }else{
+                    fetch(`/api/AsignarViajes/${idViaje}/false/1/${idVendedor}/hola`, {
+                        method: 'PUT',
+                        //body: JSON.stringify(this.state),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        console.log(res.json());
+                        this.setState({
+                            selected1: false
+                        });
+                        generalDataR.asientosSelected.selected1 = false;
+                    });                    
+                }                
+                break;
+
+            case '2':
+                if(!this.state.selected2){//No está seleccionado el asiento
+                    asiento = "2";
+                    fetch(`/api/AsignarViajes/${idViaje}/2/${idVendedor}/Hola`, {
+                        method: 'PUT',
+                        body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => res.json())
+                    .then(data => {
+                        console.log(data.update);
+                        let promiseData = data;
+                        if(promiseData.update != null){
+                            this.setState({
+                                selected2: true
+                            });
+                            generalDataR.asientosSelected.selected2 = true;
+                        }else{
+                            alert('El asiento está ocupado');
+                            this.setState({
+                                selected2: false
+                            });
+                            generalDataR.asientosSelected.selected2 = false;
+                        }
+                    }).catch(err => console.log(err));
+                }else{
+                    fetch(`/api/AsignarViajes/${idViaje}/false/2/${idVendedor}/hola`, {
+                        method: 'PUT',
+                        //body: JSON.stringify(this.state),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(res => {
+                        console.log(res.json());
+                        this.setState({
+                            selected2: false
+                        });
+                        generalDataR.asientosSelected.selected2 = false;
+                    });                    
+                }              
+                break;
+
+                case '3':
+                    if(!this.state.selected3){//No está seleccionado el asiento
+                        asiento = "3";
+                        fetch(`/api/AsignarViajes/${idViaje}/3/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected3: true
+                                });
+                                generalDataR.asientosSelected.selected3 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected3: false
+                                });
+                                generalDataR.asientosSelected.selected3 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/3/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected3: false
+                            });
+                            generalDataR.asientosSelected.selected3 = false;
+                        });                    
+                    }                
+                    break;
+
+                case '4':
+                    if(!this.state.selected4){//No está seleccionado el asiento
+                        asiento = "4";
+                        fetch(`/api/AsignarViajes/${idViaje}/4/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected4: true
+                                });
+                                generalDataR.asientosSelected.selected4 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected4: false
+                                });
+                                generalDataR.asientosSelected.selected4 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/4/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected4: false
+                            });
+                            generalDataR.asientosSelected.selected4 = false;
+                        });                    
+                    } 
+                    break;
+
+                case '5':
+                    if(!this.state.selected5){//No está seleccionado el asiento
+                        asiento = "5";
+                        fetch(`/api/AsignarViajes/${idViaje}/5/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected5: true
+                                });
+                                generalDataR.asientosSelected.selected5 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected5: false
+                                });
+                                generalDataR.asientosSelected.selected5 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/5/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected5: false
+                            });
+                            generalDataR.asientosSelected.selected5 = false;
+                        });                    
+                    } 
+                    break;
+                case '6':
+                    if(!this.state.selected6){//No está seleccionado el asiento
+                        asiento = "6";
+                        fetch(`/api/AsignarViajes/${idViaje}/6/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected6: true
+                                });
+                                generalDataR.asientosSelected.selected6 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected6: false
+                                });
+                                generalDataR.asientosSelected.selected6 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/6/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected6: false
+                            });
+                            generalDataR.asientosSelected.selected6 = false;
+                        });                    
+                    } 
+                    break;
+                case '7':
+                    if(!this.state.selected7){//No está seleccionado el asiento
+                        asiento = "7";
+                        fetch(`/api/AsignarViajes/${idViaje}/7/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected7: true
+                                });
+                                generalDataR.asientosSelected.selected7 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected7: false
+                                });
+                                generalDataR.asientosSelected.selected7 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/7/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected7: false
+                            });
+                            generalDataR.asientosSelected.selected7 = false;
+                        });                    
+                    } 
+                    break;
+                case '8':
+                    if(!this.state.selected8){//No está seleccionado el asiento
+                        asiento = "8";
+                        fetch(`/api/AsignarViajes/${idViaje}/8/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected8: true
+                                });
+                                generalDataR.asientosSelected.selected8 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected8: false
+                                });
+                                generalDataR.asientosSelected.selected8 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/8/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected8: false
+                            });
+                            generalDataR.asientosSelected.selected8 = false;
+                        });                    
+                    } 
+                    break;
+                case '9':
+                    if(!this.state.selected9){//No está seleccionado el asiento
+                        asiento = "9";
+                        fetch(`/api/AsignarViajes/${idViaje}/9/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected9: true
+                                });
+                                generalDataR.asientosSelected.selected9 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected9: false
+                                });
+                                generalDataR.asientosSelected.selected9 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/9/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected9: false
+                            });
+                            generalDataR.asientosSelected.selected9 = false;
+                        });                    
+                    } 
+                    break;
+                case '10':
+                    if(!this.state.selected10){//No está seleccionado el asiento
+                        asiento = "10";
+                        fetch(`/api/AsignarViajes/${idViaje}/10/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected10: true
+                                });
+                                generalDataR.asientosSelected.selected10 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected10: false
+                                });
+                                generalDataR.asientosSelected.selected10 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/10/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected10: false
+                            });
+                            generalDataR.asientosSelected.selected10 = false;
+                        });                    
+                    } 
+                    break;
+                case '11':
+                    if(!this.state.selected11){//No está seleccionado el asiento
+                        asiento = "11";
+                        fetch(`/api/AsignarViajes/${idViaje}/11/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected11: true
+                                });
+                                generalDataR.asientosSelected.selected11 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected11: false
+                                });
+                                generalDataR.asientosSelected.selected11 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/11/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected11: false
+                            });
+                            generalDataR.asientosSelected.selected11 = false;
+                        });                    
+                    } 
+                    break;
+                case '12':
+                    if(!this.state.selected12){//No está seleccionado el asiento
+                        asiento = "12";
+                        fetch(`/api/AsignarViajes/${idViaje}/12/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected12: true
+                                });
+                                generalDataR.asientosSelected.selected12 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected12: false
+                                });
+                                generalDataR.asientosSelected.selected12 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/12/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected12: false
+                            });
+                            generalDataR.asientosSelected.selected12 = false;
+                        });                    
+                    } 
+                    break;
+                case '13':
+                    if(!this.state.selected13){//No está seleccionado el asiento
+                        asiento = "13";
+                        fetch(`/api/AsignarViajes/${idViaje}/13/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected13: true
+                                });
+                                generalDataR.asientosSelected.selected13 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected13: false
+                                });
+                                generalDataR.asientosSelected.selected13 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/13/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected13: false
+                            });
+                            generalDataR.asientosSelected.selected13 = false;
+                        });                    
+                    } 
+                    break;
+                case '14':
+                    if(!this.state.selected14){//No está seleccionado el asiento
+                        asiento = "14";
+                        fetch(`/api/AsignarViajes/${idViaje}/14/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected14: true
+                                });
+                                generalDataR.asientosSelected.selected14 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected14: false
+                                });
+                                generalDataR.asientosSelected.selected14 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/14/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected14: false
+                            });
+                            generalDataR.asientosSelected.selected14 = false;
+                        });                    
+                    } 
+                    break;
+                case '15':
+                    if(!this.state.selected15){//No está seleccionado el asiento
+                        asiento = "15";
+                        fetch(`/api/AsignarViajes/${idViaje}/15/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected15: true
+                                });
+                                generalDataR.asientosSelected.selected15 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected15: false
+                                });
+                                generalDataR.asientosSelected.selected15 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/15/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected15: false
+                            });
+                            generalDataR.asientosSelected.selected15 = false;
+                        });                    
+                    } 
+                    break;
+                case '16':
+                    if(!this.state.selected16){//No está seleccionado el asiento
+                        asiento = "16";
+                        fetch(`/api/AsignarViajes/${idViaje}/16/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected16: true
+                                });
+                                generalDataR.asientosSelected.selected16 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected16: false
+                                });
+                                generalDataR.asientosSelected.selected16 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/16/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected16: false
+                            });
+                            generalDataR.asientosSelected.selected16 = false;
+                        });                    
+                    } 
+                    break;
+                case '17':
+                    if(!this.state.selected17){//No está seleccionado el asiento
+                        asiento = "17";
+                        fetch(`/api/AsignarViajes/${idViaje}/17/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected17: true
+                                });
+                                generalDataR.asientosSelected.selected17 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected17: false
+                                });
+                                generalDataR.asientosSelected.selected17 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/17/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected17: false
+                            });
+                            generalDataR.asientosSelected.selected17 = false;
+                        });                    
+                    } 
+                    break;
+                case '18':
+                    if(!this.state.selected18){//No está seleccionado el asiento
+                        asiento = "18";
+                        fetch(`/api/AsignarViajes/${idViaje}/18/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected18: true
+                                });
+                                generalDataR.asientosSelected.selected18 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected18: false
+                                });
+                                generalDataR.asientosSelected.selected18 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/18/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected18: false
+                            });
+                            generalDataR.asientosSelected.selected18 = false;
+                        });                    
+                    } 
+                    break;
+                case '19':
+                    if(!this.state.selected19){//No está seleccionado el asiento
+                        asiento = "19";
+                        fetch(`/api/AsignarViajes/${idViaje}/19/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected19: true
+                                });
+                                generalDataR.asientosSelected.selected19 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected19: false
+                                });
+                                generalDataR.asientosSelected.selected19 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/19/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected19: false
+                            });
+                            generalDataR.asientosSelected.selected19 = false;
+                        });                    
+                    } 
+                    break;
+                case '20':
+                    if(!this.state.selected20){//No está seleccionado el asiento
+                        asiento = "20";
+                        fetch(`/api/AsignarViajes/${idViaje}/20/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected20: true
+                                });
+                                generalDataR.asientosSelected.selected20 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected20: false
+                                });
+                                generalDataR.asientosSelected.selected20 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/20/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected20: false
+                            });
+                            generalDataR.asientosSelected.selected20 = false;
+                        });                    
+                    } 
+                    break;
+                case '21':
+                    if(!this.state.selected21){//No está seleccionado el asiento
+                        asiento = "21";
+                        fetch(`/api/AsignarViajes/${idViaje}/21/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected21: true
+                                });
+                                generalDataR.asientosSelected.selected21 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected21: false
+                                });
+                                generalDataR.asientosSelected.selected21 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/21/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected21: false
+                            });
+                            generalDataR.asientosSelected.selected21 = false;
+                        });                    
+                    } 
+                    break;
+                case '22':
+                    if(!this.state.selected22){//No está seleccionado el asiento
+                        asiento = "22";
+                        fetch(`/api/AsignarViajes/${idViaje}/22/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected22: true
+                                });
+                                generalDataR.asientosSelected.selected22 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected22: false
+                                });
+                                generalDataR.asientosSelected.selected22 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/22/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected22: false
+                            });
+                            generalDataR.asientosSelected.selected22 = false;
+                        });                    
+                    } 
+                    break;
+                case '23':
+                    if(!this.state.selected23){//No está seleccionado el asiento
+                        asiento = "23";
+                        fetch(`/api/AsignarViajes/${idViaje}/23/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected23: true
+                                });
+                                generalDataR.asientosSelected.selected23 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected23: false
+                                });
+                                generalDataR.asientosSelected.selected23 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/23/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected23: false
+                            });
+                            generalDataR.asientosSelected.selected23 = false;
+                        });                    
+                    } 
+                    break;
+                case '24':
+                    if(!this.state.selected24){//No está seleccionado el asiento
+                        asiento = "24";
+                        fetch(`/api/AsignarViajes/${idViaje}/24/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected24: true
+                                });
+                                generalDataR.asientosSelected.selected24 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected24: false
+                                });
+                                generalDataR.asientosSelected.selected24 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/24/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected24: false
+                            });
+                            generalDataR.asientosSelected.selected24 = false;
+                        });                    
+                    } 
+                    break;
+                case '25':
+                    if(!this.state.selected25){//No está seleccionado el asiento
+                        asiento = "25";
+                        fetch(`/api/AsignarViajes/${idViaje}/25/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected25: true
+                                });
+                                generalDataR.asientosSelected.selected25 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected25: false
+                                });
+                                generalDataR.asientosSelected.selected25 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/25/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected25: false
+                            });
+                            generalDataR.asientosSelected.selected25 = false;
+                        });                    
+                    } 
+                    break;
+                case '26':
+                    if(!this.state.selected26){//No está seleccionado el asiento
+                        asiento = "26";
+                        fetch(`/api/AsignarViajes/${idViaje}/26/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected26: true
+                                });
+                                generalDataR.asientosSelected.selected26 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected26: false
+                                });
+                                generalDataR.asientosSelected.selected26 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/26/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected26: false
+                            });
+                            generalDataR.asientosSelected.selected26 = false;
+                        });                    
+                    } 
+                    break;
+                case '27':
+                    if(!this.state.selected27){//No está seleccionado el asiento
+                        asiento = "27";
+                        fetch(`/api/AsignarViajes/${idViaje}/27/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected27: true
+                                });
+                                generalDataR.asientosSelected.selected27 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected27: false
+                                });
+                                generalDataR.asientosSelected.selected27 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/27/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected27: false
+                            });
+                            generalDataR.asientosSelected.selected27 = false;
+                        });                    
+                    } 
+                    break;
+                case '28':
+                    if(!this.state.selected28){//No está seleccionado el asiento
+                        asiento = "28";
+                        fetch(`/api/AsignarViajes/${idViaje}/28/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected28: true
+                                });
+                                generalDataR.asientosSelected.selected28 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected28: false
+                                });
+                                generalDataR.asientosSelected.selected28 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/28/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected28: false
+                            });
+                            generalDataR.asientosSelected.selected28 = false;
+                        });                    
+                    } 
+                    break;
+                case '29':
+                    if(!this.state.selected29){//No está seleccionado el asiento
+                        asiento = "29";
+                        fetch(`/api/AsignarViajes/${idViaje}/29/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected29: true
+                                });
+                                generalDataR.asientosSelected.selected29 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected29: false
+                                });
+                                generalDataR.asientosSelected.selected29 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/29/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected29: false
+                            });
+                            generalDataR.asientosSelected.selected29 = false;
+                        });                    
+                    } 
+                    break;
+                case '30':
+                    if(!this.state.selected30){//No está seleccionado el asiento
+                        asiento = "30";
+                        fetch(`/api/AsignarViajes/${idViaje}/30/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected30: true
+                                });
+                                generalDataR.asientosSelected.selected30 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected30: false
+                                });
+                                generalDataR.asientosSelected.selected30 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/30/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected30: false
+                            });
+                            generalDataR.asientosSelected.selected30 = false;
+                        });                    
+                    } 
+                    break;
+                case '31':
+                    if(!this.state.selected31){//No está seleccionado el asiento
+                        asiento = "31";
+                        fetch(`/api/AsignarViajes/${idViaje}/31/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected31: true
+                                });
+                                generalDataR.asientosSelected.selected31 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected31: false
+                                });
+                                generalDataR.asientosSelected.selected31 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/31/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected31: false
+                            });
+                            generalDataR.asientosSelected.selected31 = false;
+                        });                    
+                    } 
+                    break;
+                case '32':
+                    if(!this.state.selected32){//No está seleccionado el asiento
+                        asiento = "32";
+                        fetch(`/api/AsignarViajes/${idViaje}/32/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected32: true
+                                });
+                                generalDataR.asientosSelected.selected32 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected32: false
+                                });
+                                generalDataR.asientosSelected.selected32 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/32/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected32: false
+                            });
+                            generalDataR.asientosSelected.selected32 = false;
+                        });                    
+                    } 
+                    break;
+                case '33':
+                    if(!this.state.selected33){//No está seleccionado el asiento
+                        asiento = "33";
+                        fetch(`/api/AsignarViajes/${idViaje}/33/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected33: true
+                                });
+                                generalDataR.asientosSelected.selected33 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected33: false
+                                });
+                                generalDataR.asientosSelected.selected33 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/33/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected33: false
+                            });
+                            generalDataR.asientosSelected.selected33 = false;
+                        });                    
+                    } 
+                    break;
+                case '34':
+                    if(!this.state.selected34){//No está seleccionado el asiento
+                        asiento = "34";
+                        fetch(`/api/AsignarViajes/${idViaje}/34/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected34: true
+                                });
+                                generalDataR.asientosSelected.selected34 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected34: false
+                                });
+                                generalDataR.asientosSelected.selected34 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/34/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected34: false
+                            });
+                            generalDataR.asientosSelected.selected34 = false;
+                        });                    
+                    } 
+                    break;
+                case '35':
+                    if(!this.state.selected35){//No está seleccionado el asiento
+                        asiento = "35";
+                        fetch(`/api/AsignarViajes/${idViaje}/35/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected35: true
+                                });
+                                generalDataR.asientosSelected.selected35 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected35: false
+                                });
+                                generalDataR.asientosSelected.selected35 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/35/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected35: false
+                            });
+                            generalDataR.asientosSelected.selected35 = false;
+                        });                    
+                    } 
+                    break;
+                case '36':
+                    if(!this.state.selected36){//No está seleccionado el asiento
+                        asiento = "36";
+                        fetch(`/api/AsignarViajes/${idViaje}/36/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected36: true
+                                });
+                                generalDataR.asientosSelected.selected36 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected36: false
+                                });
+                                generalDataR.asientosSelected.selected36 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/36/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected36: false
+                            });
+                            generalDataR.asientosSelected.selected36 = false;
+                        });                    
+                    } 
+                    break;
+                case '37':
+                    if(!this.state.selected37){//No está seleccionado el asiento
+                        asiento = "37";
+                        fetch(`/api/AsignarViajes/${idViaje}/37/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected37: true
+                                });
+                                generalDataR.asientosSelected.selected37 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected37: false
+                                });
+                                generalDataR.asientosSelected.selected37 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/37/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected37: false
+                            });
+                            generalDataR.asientosSelected.selected37 = false;
+                        });                    
+                    } 
+                    break;
+                case '38':
+                    if(!this.state.selected38){//No está seleccionado el asiento
+                        asiento = "38";
+                        fetch(`/api/AsignarViajes/${idViaje}/38/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected38: true
+                                });
+                                generalDataR.asientosSelected.selected38 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected38: false
+                                });
+                                generalDataR.asientosSelected.selected38 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/38/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected38: false
+                            });
+                            generalDataR.asientosSelected.selected38 = false;
+                        });                    
+                    } 
+                    break;
+                case '39':
+                    if(!this.state.selected39){//No está seleccionado el asiento
+                        asiento = "39";
+                        fetch(`/api/AsignarViajes/${idViaje}/39/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected39: true
+                                });
+                                generalDataR.asientosSelected.selected39 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected39: false
+                                });
+                                generalDataR.asientosSelected.selected39 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/39/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected39: false
+                            });
+                            generalDataR.asientosSelected.selected39 = false;
+                        });                    
+                    } 
+                    break;
+                case '40':
+                    if(!this.state.selected40){//No está seleccionado el asiento
+                        asiento = "40";
+                        fetch(`/api/AsignarViajes/${idViaje}/40/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected40: true
+                                });
+                                generalDataR.asientosSelected.selected40 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected40: false
+                                });
+                                generalDataR.asientosSelected.selected40 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/40/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected40: false
+                            });
+                            generalDataR.asientosSelected.selected40 = false;
+                        });                    
+                    } 
+                    break;
+                case '41':
+                    if(!this.state.selected41){//No está seleccionado el asiento
+                        asiento = "41";
+                        fetch(`/api/AsignarViajes/${idViaje}/41/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected41: true
+                                });
+                                generalDataR.asientosSelected.selected41 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected41: false
+                                });
+                                generalDataR.asientosSelected.selected41 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/41/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected41: false
+                            });
+                            generalDataR.asientosSelected.selected41 = false;
+                        });                    
+                    } 
+                    break;
+                case '42':
+                    if(!this.state.selected42){//No está seleccionado el asiento
+                        asiento = "42";
+                        fetch(`/api/AsignarViajes/${idViaje}/42/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected42: true
+                                });
+                                generalDataR.asientosSelected.selected42 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected42: false
+                                });
+                                generalDataR.asientosSelected.selected42 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/42/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected42: false
+                            });
+                            generalDataR.asientosSelected.selected42 = false;
+                        });                    
+                    } 
+                    break;
+                case '43':
+                    if(!this.state.selected43){//No está seleccionado el asiento
+                        asiento = "43";
+                        fetch(`/api/AsignarViajes/${idViaje}/43/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected43: true
+                                });
+                                generalDataR.asientosSelected.selected43 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected43: false
+                                });
+                                generalDataR.asientosSelected.selected43 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/43/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected43: false
+                            });
+                            generalDataR.asientosSelected.selected43 = false;
+                        });                    
+                    } 
+                    break;
+                case '44':
+                    if(!this.state.selected44){//No está seleccionado el asiento
+                        asiento = "44";
+                        fetch(`/api/AsignarViajes/${idViaje}/44/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected44: true
+                                });
+                                generalDataR.asientosSelected.selected44 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected44: false
+                                });
+                                generalDataR.asientosSelected.selected44 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/44/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected44: false
+                            });
+                            generalDataR.asientosSelected.selected44 = false;
+                        });                    
+                    } 
+                    break;
+                case '45':
+                    if(!this.state.selected45){//No está seleccionado el asiento
+                        asiento = "45";
+                        fetch(`/api/AsignarViajes/${idViaje}/45/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected45: true
+                                });
+                                generalDataR.asientosSelected.selected45 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected45: false
+                                });
+                                generalDataR.asientosSelected.selected45 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/45/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected45: false
+                            });
+                            generalDataR.asientosSelected.selected45 = false;
+                        });                    
+                    } 
+                    break;
+                case '46':
+                    if(!this.state.selected46){//No está seleccionado el asiento
+                        asiento = "46";
+                        fetch(`/api/AsignarViajes/${idViaje}/46/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected46: true
+                                });
+                                generalDataR.asientosSelected.selected46 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected46: false
+                                });
+                                generalDataR.asientosSelected.selected46 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/46/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected46: false
+                            });
+                            generalDataR.asientosSelected.selected46 = false;
+                        });                    
+                    } 
+                    break;
+                case '47':
+                    if(!this.state.selected47){//No está seleccionado el asiento
+                        asiento = "47";
+                        fetch(`/api/AsignarViajes/${idViaje}/47/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected47: true
+                                });
+                                generalDataR.asientosSelected.selected47 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected47: false
+                                });
+                                generalDataR.asientosSelected.selected47 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/47/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected47: false
+                            });
+                            generalDataR.asientosSelected.selected47 = false;
+                        });                    
+                    } 
+                    break;
+                case '48':
+                    if(!this.state.selected48){//No está seleccionado el asiento
+                        asiento = "48";
+                        fetch(`/api/AsignarViajes/${idViaje}/48/${idVendedor}/Hola`, {
+                            method: 'PUT',
+                            body: JSON.stringify({idVendedor, idViaje, asiento, fechaCreacion}),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => res.json())
+                        .then(data => {
+                            console.log(data.update);
+                            let promiseData = data;
+                            if(promiseData.update != null){
+                                this.setState({
+                                    selected48: true
+                                });
+                                generalDataR.asientosSelected.selected48 = true;
+                            }else{
+                                alert('El asiento está ocupado');
+                                this.setState({
+                                    selected48: false
+                                });
+                                generalDataR.asientosSelected.selected48 = false;
+                            }
+                        }).catch(err => console.log(err));
+                    }else{
+                        fetch(`/api/AsignarViajes/${idViaje}/false/48/${idVendedor}/hola`, {
+                            method: 'PUT',
+                            //body: JSON.stringify(this.state),
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(res => {
+                            console.log(res.json());
+                            this.setState({
+                                selected48: false
+                            });
+                            generalDataR.asientosSelected.selected48 = false;
+                        });                    
+                    } 
+                    break;
+        
+            default:
+                break;
+        }
+        
+    }
+
+    render () {
+        return (
+            <div className="text-center">  
+                <div>
+                {/* Simbologia */}
+                <Row>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button outline color="danger"><i className="fa fa-check" /></Button>{' '}
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button color="secondary" disabled><i className="fa fa-user" /></Button>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <Button color="danger" size="lg" className="asientoDisponible asiento">{'  '}</Button>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Selecionado</h6>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Ocupado</h6>
+                    </Col>
+                    <Col md="4" xs="4" sm="4" lg="4">
+                        <h6>Libre</h6>
+                    </Col>
+                </Row>
+                {/* Fin Simbologia */}
+                <br/>
+                <Row>
+                    <Col md="12" xs="12" sm="12" lg="12">
+                    <div>
+                        <Card body outline color="secondary"  className="text-center">
+                        <CardTitle>Seleccione los lugares</CardTitle>
+                        <br/>
+                        <div>
+                            <Button disabled={this.state.comprobar} onClick={this.handleClickComprobar} size="lg" outline color="info">Actualizar</Button>
+                        </div>
+                        <br/>
+                        <Col xs="12" sm="12" md={{ size:9, offset:3 }} lg={{ size:9, offset:3 }}>
+                            {/* Elementos CHOFER y ESCALERAS */}
+                            <Row>
+                            <Col xs="2" sm="1" className="elementosAutobus">
+                                <i className="fa fa-user-tie" />
+                            </Col>
+                            <Col xs="2" sm="1">
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                            </Col>
+                            <Col xs="2" sm="1" className="elementosAutobus">
+                                <i className="fa fa-sort-amount-down" />
+                            </Col>
+                            </Row>
+                            {/* TERMINA Elementos CHOFER y ESCALERAS */}
+                            {/* Asientos */}
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento1 == 'false') ? 
+                                    (
+                                        <button name='1' id='1' type="button" className={(this.state.selected1)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero1 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero1 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">01</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento2  == 'false') ? 
+                                    (
+                                        <button name='2' id='2' type="button" className={(this.state.selected2)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero2 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero2 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">02</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento3  == 'false') ? 
+                                    (
+                                        <button name='3' id='3' type="button" className={(this.state.selected3)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero3 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero3 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">03</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento4  == 'false') ? 
+                                    (
+                                        <button name='4' id='4' type="button" className={(this.state.selected4)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero4 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero4 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">04</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento5  == 'false') ? 
+                                    (
+                                        <button name='5' id='5' type="button" className={(this.state.selected5)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero5 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero5 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">05</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento6  == 'false') ? 
+                                    (
+                                        <button name='6' id='6' type="button" className={(this.state.selected6)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero6 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero6 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">06</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento7  == 'false') ? 
+                                    (
+                                        <button name='7' id='7' type="button" className={(this.state.selected7)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero7 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero7 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">07</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento8  == 'false') ? 
+                                    (
+                                        <button name='8' id='8' type="button" className={(this.state.selected8)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero8 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero8 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">08</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento9  == 'false') ? 
+                                    (
+                                        <button name='9' id='9' type="button" className={(this.state.selected9)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero9 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero9 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">09</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento10  == 'false') ? 
+                                    (
+                                        <button name='10' id='10' type="button" className={(this.state.selected10)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero10 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero10 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">10</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento11 == 'false') ? 
+                                    (
+                                        <button name='11' id='11' type="button" className={(this.state.selected11)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero11 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero11 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">11</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento12 == 'false') ? 
+                                    (
+                                        <button name='12' id='12' type="button" className={(this.state.selected12)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero12 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero12 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">12</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento13 == 'false') ? 
+                                    (
+                                        <button name='13' id='13' type="button" className={(this.state.selected13)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero13 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero13 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">13</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento14 == 'false') ? 
+                                    (
+                                        <button name='14' id='14' type="button" className={(this.state.selected14)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero14 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero14 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">14</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento15 == 'false') ? 
+                                    (
+                                        <button name='15' id='15' type="button" className={(this.state.selected15)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero15 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero15 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">15</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento16 == 'false') ? 
+                                    (
+                                        <button name='16' id='16' type="button" className={(this.state.selected16)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero16 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero16 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">16</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento17 == 'false') ? 
+                                    (
+                                        <button name='17' id='17' type="button" className={(this.state.selected17)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero17 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero17 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">17</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento18 == 'false') ? 
+                                    (
+                                        <button name='18' id='18' type="button" className={(this.state.selected18)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero18 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero18 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">18</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento19 == 'false') ? 
+                                    (
+                                        <button name='19' id='19' type="button" className={(this.state.selected19)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero19 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero19 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">19</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento20 == 'false') ? 
+                                    (
+                                        <button name='20' id='20' type="button" className={(this.state.selected20)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero20 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero20 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">20</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento21 == 'false') ? 
+                                    (
+                                        <button name='21' id='21' type="button" className={(this.state.selected21)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero21 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero21 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">21</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento22 == 'false') ? 
+                                    (
+                                        <button name='22' id='22' type="button" className={(this.state.selected22)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero22 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero22 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">22</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento23 == 'false') ? 
+                                    (
+                                        <button name='23' id='23' type="button" className={(this.state.selected23)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero23 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero23 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">23</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento24 == 'false') ? 
+                                    (
+                                        <button name='24' id='24' type="button" className={(this.state.selected24)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero24 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero24 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">24</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento25 == 'false') ? 
+                                    (
+                                        <button name='25' id='25' type="button" className={(this.state.selected25)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero25 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero25 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">25</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento26 == 'false') ? 
+                                    (
+                                        <button name='26' id='26' type="button" className={(this.state.selected26)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero26 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero26 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">26</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento27 == 'false') ? 
+                                    (
+                                        <button name='27' id='27' type="button" className={(this.state.selected27)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero27 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero27 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">27</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento28 == 'false') ? 
+                                    (
+                                        <button name='28' id='28' type="button" className={(this.state.selected28)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero28 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero28 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">28</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento29 == 'false') ? 
+                                    (
+                                        <button name='29' id='29' type="button" className={(this.state.selected29)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero29 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero29 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">29</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento30 == 'false') ? 
+                                    (
+                                        <button name='30' id='30' type="button" className={(this.state.selected30)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero30 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero30 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">30</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento31 == 'false') ? 
+                                    (
+                                        <button name='31' id='31' type="button" className={(this.state.selected31)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero31 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero31 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">31</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento32 == 'false') ? 
+                                    (
+                                        <button name='32' id='32' type="button" className={(this.state.selected32)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero32 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero32 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">32</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento33 == 'false') ? 
+                                    (
+                                        <button name='33' id='33' type="button" className={(this.state.selected33)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero33 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero33 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">33</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento34 == 'false') ? 
+                                    (
+                                        <button name='34' id='34' type="button" className={(this.state.selected34)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero34 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero34 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">34</p>
+                            </Col>
+                            <Col xs="3">
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento35 == 'false') ? 
+                                    (
+                                        <button name='35' id='35' type="button" className={(this.state.selected35)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero35 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero35 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">35</p>
+                            </Col>
+                            <Col xs="2" sm="1">
+                                {(this.state.asiento36 == 'false') ? 
+                                    (
+                                        <button name='36' id='36' type="button" className={(this.state.selected36)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                    )
+                                    :
+                                    (
+                                        <button type="button" class={(this.state.genero36 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero36 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                    )
+                                }
+                                <p className="smallDevice text-center">36</p>
+                            </Col>
+                            </Row>
+                            <Row>
+                                <Col xs="2" sm="1">
+                                    {(this.state.asiento37 == 'false') ? 
+                                        (
+                                            <button name='37' id='37' type="button" className={(this.state.selected37)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                        )
+                                        :
+                                        (
+                                            <button type="button" class={(this.state.genero37 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero37 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                        )
+                                    }
+                                    <p className="smallDevice text-center">37</p>
+                                </Col>
+                                <Col xs="2" sm="1">
+                                    {(this.state.asiento38 == 'false') ? 
+                                        (
+                                            <button name='38' id='38' type="button" className={(this.state.selected38)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                        )
+                                        :
+                                        (
+                                            <button type="button" class={(this.state.genero38 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero38 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                        )
+                                    }
+                                    <p className="smallDevice text-center">38</p>
+                                </Col>
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 39) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento39 == 'false') ? 
+                                                (
+                                                    <button name='39' id='39' type="button" className={(this.state.selected39)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero39 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero39 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">39</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 40) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento40 == 'false') ? 
+                                                (
+                                                    <button name='40' id='40' type="button" className={(this.state.selected40)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero40 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero40 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">40</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                            {/************************** ASIENTOS 41 - 48 **************************/}
+                            <Row>
+                                {
+                                    (this.state.noAsientos >= 41) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento41 == 'false') ? 
+                                                (
+                                                    <button name='41' id='41' type="button" className={(this.state.selected41)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero41 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero41 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">41</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 42) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento42 == 'false') ? 
+                                                (
+                                                    <button name='42' id='42' type="button" className={(this.state.selected42)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero42 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero42 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">42</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 43) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento43 == 'false') ? 
+                                                (
+                                                    <button name='43' id='43' type="button" className={(this.state.selected43)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero43 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero43 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">43</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 44) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento44 == 'false') ? 
+                                                (
+                                                    <button name='44' id='44' type="button" className={(this.state.selected44)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero44 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero44 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">44</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                            <Row>
+                                {
+                                    (this.state.noAsientos >= 45) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento45 == 'false') ? 
+                                                (
+                                                    <button name='45' id='45' type="button" className={(this.state.selected45)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero45 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero45 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">45</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 46) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento46 == 'false') ? 
+                                                (
+                                                    <button name='46' id='46' type="button" className={(this.state.selected46)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero46 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero46 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">46</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                <Col xs="3">
+                                </Col>
+                                {
+                                    (this.state.noAsientos >= 47) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento47 == 'false') ? 
+                                                (
+                                                    <button name='47' id='47' type="button" className={(this.state.selected47)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero47 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero47 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">47</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                                {
+                                    (this.state.noAsientos >= 48) ?
+                                    (
+                                        <Col xs="2" sm="1">
+                                            {(this.state.asiento48 == 'false') ? 
+                                                (
+                                                    <button name='48' id='48' type="button" className={(this.state.selected48)? "btn btn-outline-danger asientoSeleccionado":"btn btn-danger btn-lg asientoDisponible"} onClick={this.handleSelectAsiento}></button>
+                                                )
+                                                :
+                                                (
+                                                    <button type="button" class={(this.state.genero48 == 'H')? "btn btn-outline-secondary Hombre":(this.state.genero48 == 'M')? "btn btn-outline-secondary Mujer":"btn btn-outline-secondary None"} disabled></button>
+                                                )
+                                            }
+                                            <p className="smallDevice text-center">48</p>
+                                        </Col>
+                                    )
+                                    :
+                                    ''
+                                }
+                            </Row>
+                        {/* FIN Asientos */}
+                        </Col>
+                        </Card>
+                    </div>
+                    </Col>
+                </Row>
+                </div>
+                
+            </div>
+        )
+    }
+}
+
+class SixStep extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            validationActualizar: false,
+            modal: false,
+            clientes: [],
+            optCliente: [],
+            optDescuento: [],
+            resultPasajeros: [],
+            pasajeros: [],
+            asientosPorOcupar: '',
+            busqueda: '',
+            nombreBusqueda: '',
+            apaternoBusqueda: '',
+            amaternoBusqueda: '',
+        };
+
+        this.actualizar = this.actualizar.bind(this);
+        this.fetchUser = this.fetchUser.bind(this);
+        this.verificarAsientosSeleccionados = this.verificarAsientosSeleccionados.bind(this);
+        this.buscarPasajeros = this.buscarPasajeros.bind(this);
+        this.deletePasajero = this.deletePasajero.bind(this);
+
+        this.handleAddPasajero = this.handleAddPasajero.bind(this);
+        this.handleOnChangeAsiento = this.handleOnChangeAsiento.bind(this);
+        this.handleOnChangeRazon = this.handleOnChangeRazon.bind(this);
+        this.handleOnChangeDescuento = this.handleOnChangeDescuento.bind(this);
+        this.handleOnChangeNombreBusqueda = this.handleOnChangeNombreBusqueda.bind(this);
+        this.handleOnChangeApaternoBusqueda = this.handleOnChangeApaternoBusqueda.bind(this);
+        this.handleOnChangeAmaternoBusqueda = this.handleOnChangeAmaternoBusqueda.bind(this);
+
+        this.toggle = this.toggle.bind(this);
+        this.actualizarListaClientes = this.actualizarListaClientes.bind(this);
+        this.comprobarRangoDeFecha = this.comprobarRangoDeFecha.bind(this);
+    }
+
+    isValidated() {
+        if(asientosR.length == pasajerosR.length){
+            for (let i = 0; i < pasajerosR.length; i++) {
+                console.log('descuentosLabel[i]', descuentosLabelR[i]);
+                if (pasajerosR[i].asiento == 0) {
+                    alert('Falta seleccionar el asiento del pasajero '+pasajerosR[i].nombre);
+                    return false;
+                }
+                if(razonesR[i].razon == 'razon'){
+                    alert('Selecciona la razón del pasajero '+pasajerosR[i].nombre);
+                    return false;
+                }
+                //Validamos descuentos
+                try {
+                    if(tipoDeViaje=="Familiar" && asientosR.length < 5){
+                        alert('Para ser acreedor del descuento familiar necesitas 5 o más pasajeros');
+                        return false;
+                    }
+                    if(descuentosLabelR[i] == 'Niño'){
+                        alert('descuento nino');
+                        if(tipoDeViaje == 'Normal'){
+                            if(pasajerosR[i].typeClient != 'Niño'){
+                                alert('Para el cliente '+pasajerosR[i].nombre+' no aplica el descuento '+'Niño');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                        
+                    }else if(descuentosLabelR[i] == 'INSEN'){
+                        if(tipoDeViaje == 'Normal'){
+                            if(pasajerosR[i].typeClient  != 'INSEN'){
+                                alert('Para el cliente '+pasajerosR[i].nombre+' no aplica el descuento '+'INSEN');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }                            
+                    }else if(descuentosLabelR[i] == 'Promoción General 1'){
+                        if(tipoDeViaje == "Normal"){
+                            let inicio = descuentoValues.fechaInicio;
+                            let final = descuentoValues.fechaFinal;
+                            
+                            let arrayInicio = inicio.split("-",3);
+                            let arrayFinal = final.split("-",3);
+
+                            let fechaInicio = new Date(arrayInicio[0],parseInt(arrayInicio[1])-1,arrayInicio[2]);
+                            let fechaFinal = new Date(arrayFinal[0],parseInt(arrayFinal[1])-1,arrayFinal[2]);
+                            let hoy = new Date();
+                            
+                            console.log('fechaInicio', fechaInicio);
+                            console.log('fechaFinal',fechaFinal);
+                            
+                            console.log('hoy', hoy);
+
+                            let comprobar = this.comprobarRangoDeFecha(fechaInicio, fechaFinal, hoy);
+                            if(!comprobar){
+                                alert(`La fecha de viaje no está dentro del rango considerado por el descuento seleccionado`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }    
+                    }else if(descuentosLabelR[i] == 'Promoción General 2'){
+                        if(tipoDeViaje == "Normal"){
+                            let inicio = descuentoValues.fechaInicio;
+                            let final = descuentoValues.fechaFinal;
+                            let selectFecha = generalData.detalles.dia;
+                            
+                            let arrayInicio = inicio.split("-",3);
+                            let arrayFinal = final.split("-",3);
+                            let arrayFecha = selectFecha.split("-",3);
+
+                            let fechaInicio = new Date(arrayInicio[0],parseInt(arrayInicio[1])-1,arrayInicio[2]);
+                            let fechaFinal = new Date(arrayFinal[0],parseInt(arrayFinal[1])-1,arrayFinal[2]);
+                            let fechaSeleccionada = new Date(arrayFecha[2],parseInt(arrayFecha[1])-1,arrayFecha[0]);                                
+                            
+                            let comprobar = this.comprobarRangoDeFecha(fechaInicio, fechaFinal, fechaSeleccionada);
+                            if(!comprobar){
+                                alert(`La fecha de viaje no está dentro del rango considerado por el descuento seleccionado`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        } 
+                    }else if(descuentosLabelR[i] == 'Pacoima'){
+                        if(tipoDeViaje == 'Normal'){
+                            if(generalData.destino.municipio != 'Pacoima'){
+                                descPacoima = false;
+                                alert('No has seleccionado como destino PACOIMA, por lo que no aplica este descuento');
+                                return false;
+                            }else{
+                                descPacoima = true;
+                                dllDescPacoima = descuento;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                        
+                    }else if(descuentosLabelR[i] == 'Viajero Frecuente'){
+                        if(tipoDeViaje == "Normal"){
+                            if(pasajerosR[i].clienteFrecuente == "false"){
+                                alert('Para el cliente '+pasajerosR[i].nombre+' no aplica el descuento '+'Viajero Frecuente');
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                    }else if(descuentosLabelR[i] == 'Pronto Pago'){
+                        
+                        if(tipoDeViaje == "Normal"){
+                            //Este descuento aplica para las personas que relizan su compra con 90 dias de anticipacion
+                            //Primero obtenemos la fecha del dia de hoy
+                            let comprobar = true;
+
+                            let hoy = new Date();
+                            let fechaviaje = generalData.detalles.dia;
+
+                            let arrDate = fechaviaje.split('-', 3);
+
+                            let choy = `${hoy.getFullYear()}-${hoy.getMonth()+1}-${hoy.getDate()}`;
+                            let cviaje = `${arrDate[2]}-${arrDate[1]}-${arrDate[0]}`;
+
+                            console.log('choy', choy);
+                            console.log('cviaje', cviaje);
+
+                            var fecha1 = moment(choy);
+                            var fecha2 = moment(cviaje);
+
+                            let diasDeDiferencia = fecha2.diff(fecha1, 'days');
+
+                            console.log(fecha2.diff(fecha1, 'days'), ' dias de diferencia');
+
+                            if(diasDeDiferencia<90){
+                                alert(`La fecha de viaje será en ${diasDeDiferencia} dias. \n Dias minimos aceptados 90`);
+                                return false;
+                            }
+                        }else{
+                            alert(`Seleccionaste el tipo de viaje ${tipoDeViaje}, no puedes solicitar más descuentos`);
+                            return false;
+                        }
+                    }
+                } catch (error) {
+                    
+                }
+                //
+                for (let j = 0; j < pasajerosR.length; j++) {
+                    if((pasajerosR[i].asiento == pasajerosR[j].asiento) && (pasajerosR[i].idCliente != pasajerosR[j].idCliente)){
+                        alert('No puedes repetir asientos. Pasajeros: '+pasajerosR[i].nombre+' y '+pasajerosR[j].nombre);
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }else{
+            alert('Faltan asientos por llenar');
+            return false
+        }
+    }
+
+    comprobarRangoDeFecha(fechaAnterior, fechaPosterior, FechaActual){
+
+        if(FechaActual >= fechaAnterior && fechaAnterior <= fechaPosterior){
+            console.log('Se encuentra entre el rango de fechas');
+            return true
+        }else{
+            console.log('NO Se encuentra entre el rango de fechas');
+            return false
+        }
+    }
+
+    componentDidMount(){
+        pasajerosR = [];
+    }
+
+    actualizar(){
+        this.fetchUser();
+        this.verificarAsientosSeleccionados();
+
+        this.setState({
+            validationActualizar: true
+        });
+    }
+
+    toggle() {
+        this.setState(prevState => ({
+        modal: !prevState.modal
+        }));
+    }
+
+    //Sacamos datos del vendedor y sus descuentos disponibles
+    fetchUser(){
+        fetch(`/api/Usuarios/${generalData.vendedor.username}/descuentosVenta`)
+          .then(res => res.json())
+          .then(data => {
+              console.log('descuentos', data);
+              generalDataR.vendedor.id_Usuario = data.usuario.id_Usuario;
+              generalDataR.vendedor.nombre = `${data.usuario.nombre} ${data.usuario.apellidoPaterno} ${data.usuario.apellidoMaterno}`;
+              generalDataR.vendedor.apellidoPaterno = data.usuario.apellidoPaterno;
+              generalDataR.vendedor.apellidoMaterno = data.usuario.apellidoMaterno;
+              generalDataR.vendedor.sucursal = data.usuario.sucursal;
+              generalDataR.vendedor.tipoDescuento = data.usuario.tipoDescuento;
+              ///////////////SUCURSAL
+              generalDataR.sucursalVendedor.direccion = data.sucursal.direccion;
+              generalDataR.sucursalVendedor.tel =  data.sucursal.tel;
+              generalDataR.sucursalVendedor.tel2 = data.sucursal.tel2;
+              generalDataR.sucursalVendedor.correo = data.sucursal.correo;
+              generalDataR.sucursalVendedor.nombre = data.sucursal.nombre;
+              //////////////DESCUENTOS
+              console.log('descuentos', data.descuentos);
+              this.setState({
+                optDescuento : data.descuentos
+              })
+              
+          })
+    }
+
+    verificarAsientosSeleccionados(){
+        let auxAsientosPorOcupar = '';
+        asientosR = [];
+        propsR = [];
+        //console.log('asientosSelected',generalData.asientosSelected);
+        for (const prop in generalDataR.asientosSelected) {
+            if(prop == 'selected1'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(1);
+                    auxAsientosPorOcupar+='1, '
+                }
+            }
+            if(prop == 'selected2'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(2);
+                    auxAsientosPorOcupar+='2, '
+                }
+            }
+            if(prop == 'selected3'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(3);
+                    auxAsientosPorOcupar+='3, '
+                }
+            }
+            if(prop == 'selected4'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(4);
+                    auxAsientosPorOcupar+='4, '
+                }
+            }
+            if(prop == 'selected5'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(5);
+                    auxAsientosPorOcupar+='5, '
+                }
+            }
+            if(prop == 'selected6'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(6);
+                    auxAsientosPorOcupar+='6, '
+                }
+            }
+            if(prop == 'selected7'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(7);
+                    auxAsientosPorOcupar+='7, '
+                }
+            }
+            if(prop == 'selected8'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(8);
+                    auxAsientosPorOcupar+='8, '
+                }
+            }
+            if(prop == 'selected9'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(9);
+                    auxAsientosPorOcupar+='9, '
+                }
+            }
+            if(prop == 'selected10'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(10);
+                    auxAsientosPorOcupar+='10, '
+                }
+            }
+            if(prop == 'selected11'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(11);
+                    auxAsientosPorOcupar+='11, '
+                }
+            }
+            if(prop == 'selected12'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(12);
+                    auxAsientosPorOcupar+='12, '
+                }
+            }
+            if(prop == 'selected13'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(13);
+                    auxAsientosPorOcupar+='13, '
+                }
+            }
+            if(prop == 'selected14'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(14);
+                    auxAsientosPorOcupar+='14, '
+                }
+            }
+            if(prop == 'selected15'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(15);
+                    auxAsientosPorOcupar+='15, '
+                }
+            }
+            if(prop == 'selected16'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(16);
+                    auxAsientosPorOcupar+='16, '
+                }
+            }
+            if(prop == 'selected17'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(17);
+                    auxAsientosPorOcupar+='17, '
+                }
+            }
+            if(prop == 'selected18'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(18);
+                    auxAsientosPorOcupar+='18, '
+                }
+            }
+            if(prop == 'selected19'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(19);
+                    auxAsientosPorOcupar+='19, '
+                }
+            }
+            if(prop == 'selected20'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(20);
+                    auxAsientosPorOcupar+='20, '
+                }
+            }
+            if(prop == 'selected21'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(21);
+                    auxAsientosPorOcupar+='21, '
+                }
+            }
+            if(prop == 'selected22'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(22);
+                    auxAsientosPorOcupar+='22, '
+                }
+            }
+            if(prop == 'selected23'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(23);
+                    auxAsientosPorOcupar+='23, '
+                }
+            }
+            if(prop == 'selected24'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(24);
+                    auxAsientosPorOcupar+='24, '
+                }
+            }
+            if(prop == 'selected25'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(25);
+                    auxAsientosPorOcupar+='25, '
+                }
+            }
+            if(prop == 'selected26'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(26);
+                    auxAsientosPorOcupar+='26, '
+                }
+            }
+            if(prop == 'selected27'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(27);
+                    auxAsientosPorOcupar+='27, '
+                }
+            }
+            if(prop == 'selected28'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(28);
+                    auxAsientosPorOcupar+='28, '
+                }
+            }
+            if(prop == 'selected29'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(29);
+                    auxAsientosPorOcupar+='29, '
+                }
+            }
+            if(prop == 'selected30'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(30);
+                    auxAsientosPorOcupar+='30, '
+                }
+            }
+            if(prop == 'selected31'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(31);
+                    auxAsientosPorOcupar+='31, '
+                }
+            }
+            if(prop == 'selected32'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(32);
+                    auxAsientosPorOcupar+='32, '
+                }
+            }
+            if(prop == 'selected33'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(33);
+                    auxAsientosPorOcupar+='33, '
+                }
+            }
+            if(prop == 'selected34'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(34);
+                    auxAsientosPorOcupar+='34, '
+                }
+            }
+            if(prop == 'selected35'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(35);
+                    auxAsientosPorOcupar+='35, '
+                }
+            }
+            if(prop == 'selected36'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(36);
+                    auxAsientosPorOcupar+='36, '
+                }
+            }
+            if(prop == 'selected37'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(37);
+                    auxAsientosPorOcupar+='37, '
+                }
+            }
+            if(prop == 'selected38'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(38);
+                    auxAsientosPorOcupar+='38, '
+                }
+            }
+            if(prop == 'selected39'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(39);
+                    auxAsientosPorOcupar+='39, '
+                }
+            }
+            if(prop == 'selected40'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(40);
+                    auxAsientosPorOcupar+='40, '
+                }
+            }
+            if(prop == 'selected41'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(41);
+                    auxAsientosPorOcupar+='41, '
+                }
+            }
+            if(prop == 'selected42'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(42);
+                    auxAsientosPorOcupar+='42, '
+                }
+            }
+            if(prop == 'selected43'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(43);
+                    auxAsientosPorOcupar+='43, '
+                }
+            }
+            if(prop == 'selected44'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(44);
+                    auxAsientosPorOcupar+='44, '
+                }
+            }
+            if(prop == 'selected45'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(45);
+                    auxAsientosPorOcupar+='45, '
+                }
+            }
+            if(prop == 'selected46'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(46);
+                    auxAsientosPorOcupar+='46, '
+                }
+            }
+            if(prop == 'selected47'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(47);
+                    auxAsientosPorOcupar+='47, '
+                }
+            }
+            if(prop == 'selected48'){
+                if(generalDataR.asientosSelected[prop]){
+                    propsR.push(generalDataR.asientosSelected[prop]);
+                    asientosR.push(48);
+                    auxAsientosPorOcupar+='48, '
+                }
+            }
+        }
+        this.setState({
+            clientes: propsR
+        });
+        generalDataR.noPasajeros = propsR.length;
+
+        //Validamos el descuento familiar en caso de que se haya seleccionado
+        if(tipoDeViaje=="Familiar" && propsR.length < 5){
+            alert('Para ser acreedor del descuento familiar necesitas 5 o más pasajeros');
+        }
+
+        this.setState({
+            asientosPorOcupar: auxAsientosPorOcupar
+        })
+
+        console.log('props',propsR);
+        console.log('asientos',asientosR);
+    }
+
+    handleOnChangeAsiento(e){
+        let index = e.target.id;
+        let value = e.target.value;
+        console.log('index', e.target.id);
+        console.log('asiento', e.target.value);
+        pasajerosR[index].asiento = value;
+        this.setState({
+            pasajeros: pasajerosR
+        })
+    }
+
+    handleOnChangeRazon(e){
+        let index = e.target.id;
+        let value = e.target.value;
+        console.log('index', e.target.id);
+        console.log('razon', e.target.value);
+        razonesR[index].razon = value;
+    }
+    
+    handleOnChangeDescuento(e){
+        let i = e.target.selectedIndex;
+        let tex = (e.target.options[i].text);
+        let index = e.target.id;
+        descuentosR[index].descuento = (descPacoima)? 0 :  e.target.value;
+        descuentosLabelR[index] = tex;
+    }
+
+    handleOnChangeNombreBusqueda(e){
+        this.setState({
+            nombreBusqueda: e.target.value
+        })
+    }
+
+    handleOnChangeApaternoBusqueda(e){
+        this.setState({
+            apaternoBusqueda: e.target.value
+        })
+    }
+
+    handleOnChangeAmaternoBusqueda(e){
+        this.setState({
+            amaternoBusqueda: e.target.value
+        })
+    }
+
+    handleAddPasajero(idCliente, NombreCliente, listaNegra, clienteFrecuente, tipo, type){
+        if(asientosR.length == pasajerosR.length){
+            alert('No puedes agregar más pasajeros');
+        }else{
+            if(listaNegra == 'true'){
+                alert('Ver detalle en lista Negra para este cliente');
+            }
+            pasajerosR.push({
+                'asiento': 0,
+                'idCliente': idCliente,
+                'nombre': NombreCliente,
+                'tipoDeCliente': tipo,
+                'clienteFrecuente': clienteFrecuente,
+                'typeClient': type
+            });
+
+            razonesR.push({
+                'razon': 'razon'
+            });
+
+            descuentosR.push({
+                'descuento': 0
+            });
+
+            descuentosLabelR.push('');
+
+            this.setState({
+                pasajeros: pasajerosR
+            });
+        }
+    }
+
+    deletePasajero(nombre, index){
+        if (confirm('En verdad desea quitar al pasajero '+nombre)) {
+            pasajerosR.splice(index, 1);
+            descuentosR.splice(index, 1);
+            razonesR.splice(index, 1);
+            descuentosLabelR.splice(index, 1);
+            this.setState({
+                pasajeros: pasajerosR
+            });
+        }
+    }
+
+    //Buscamos los pasajeros que coincidan con lo que introdujo el vendedor
+    buscarPasajeros(){
+        let nom = 'null';
+        let ap = 'null';
+        let am = 'null';
+
+        if(this.state.nombreBusqueda != ''){
+            nom = this.state.nombreBusqueda
+        }
+
+        if(this.state.apaternoBusqueda != ''){
+            ap = this.state.apaternoBusqueda
+        }
+
+        if(this.state.amaternoBusqueda != ''){
+            am = this.state.amaternoBusqueda
+        }
+
+        fetch(`/api/Clientes/${nom}/${ap}/${am}/`)
+          .then(res => res.json())
+          .then(data => {
+            this.setState({
+                resultPasajeros: data
+            })
+          })
+          .then(() => {
+              console.log('resultPasajeros', this.state.resultPasajeros);
+          } )
+    }
+
+    actualizarListaClientes(clienteNuevo){
+        let tipo = '';
+        if(clienteNuevo.type == 'Niño'){
+            tipo = 'nino';
+        }else if(clienteNuevo.type == 'INSEN'){
+            tipo = 'adultoM';
+        }else if(clienteNuevo.type == 'Adulto'){
+            tipo = 'adulto';
+        }
+        this.handleAddPasajero(clienteNuevo.value, clienteNuevo.name, clienteNuevo.listaNegra, clienteNuevo.clienteFrecuente, tipo ,clienteNuevo.type);
+    }
+
+    render () {
+        return (
+            <div>
+                <br/>
+                <Row>
+                    <Col lg='12' md='12' sm='12' xs='12' className="text-center">
+                        <Button onClick={this.actualizar} size="lg" outline color="info">Actualizar</Button>
+                    </Col>
+                </Row>
+                <br/>
+                <Row>
+                {
+                    (generalData.vendedor.seguridad == 'Admin')?
+                    <Col lg='12' md='12' sm='12' xs='12' className="text-center">
+                        <p className="text-center">Vendedor: { (this.state.validationActualizar)? generalData.vendedor.nombre : '' }</p>
+                    </Col>
+                    :
+                    ''
+                }
+                </Row>
+                {
+                    (this.state.validationActualizar)?
+                    <div>
+                        <Row>
+                            <Col lg='8' md='8' sm='8' xs='8'>
+                                <h5>Buscar Pasajero:</h5>
+                                <Form inline>
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeNombreBusqueda} type="text" placeholder="Nombre" />
+                                    </FormGroup>
+                                    {' '}
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeApaternoBusqueda} type="text" placeholder="Apellido Paterno" />
+                                    </FormGroup>
+                                    {' '}
+                                    <FormGroup>
+                                        <Input onChange={this.handleOnChangeAmaternoBusqueda} type="text" id="busquedaPasajero" placeholder="Apellido Materno"/>
+                                        <InputGroupAddon addonType="append"><Button onClick={this.buscarPasajeros} color="secondary"><i className="fa fa-search"/></Button></InputGroupAddon>
+                                    </FormGroup>
+                                    {' '}
+                                </Form>
+                            </Col>
+                            <Col className="btn-nuevoPasajero" lg='4' md='4' sm='4' xs='4'>
+                                <Button color="primary" onClick={this.toggle}>Nuevo Pasajero <i className="fa fa-user-plus"/></Button>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='6' md='6' sm='12' xs='12'><h5>Resultados de la búsqueda:</h5></Col>
+                            <Col lg='6' md='6' sm='12' xs='12'>
+                                <span className="dot nino"></span>{' Niño '}<span className="dot adulto"></span>{' Adulto '}<span className="dot adultoM"></span>{' Adulto Mayor '}
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='12' md='12' sm='12' xs='12'>
+                                <Table responsive hover>
+                                    <thead>
+                                        <tr>
+                                        <th className="text-center">+</th>
+                                        <th>Nombre</th>
+                                        <th>Fecha de Nacimiento</th>
+                                        <th>Teléfono</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.resultPasajeros.map((pasajero, i) => 
+                                        <tr key={i}>
+                                            <td className="text-center">
+                                                <Button className="btn-sm" color="success" onClick={() => this.handleAddPasajero(pasajero.value, pasajero.name, pasajero.listaNegra, pasajero.clienteFrecuente, pasajero.simbologia, pasajero.type)}><i className="fa fa-plus"/></Button>
+                                            </td>
+                                            <td><span className={'dot '+pasajero.simbologia}/>{' '+pasajero.name}</td>
+                                            <td>{pasajero.label}</td>
+                                            <td>{pasajero.telefono}</td>
+                                        </tr>)}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                        <br/>
+                        <Row>
+                            <Col lg='12' md='12' sm='12' xs='12'>
+                                <h5>Pasajero(s) en esta venta:</h5>
+                                <p>Asiento(s) por ocupar: {this.state.asientosPorOcupar}</p>
+                                <Table responsive hover>
+                                    <thead>
+                                        <tr>
+                                            <th>Pasajero</th>
+                                            <th>Asiento</th>
+                                            <th>Razón</th>
+                                            <th>Descuento</th>
+                                            <th className="text-center">Quitar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.pasajeros.map((client, i) => 
+                                        <tr key={`${i}-${client.idCliente}`}>
+                                            <td><span className={'dot '+client.tipoDeCliente}/>{' '+client.nombre}</td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeAsiento} class="form-control">
+                                                    <option value={0}>Asiento</option>
+                                                    {asientosR.map((asiento, j) => 
+                                                        <option key={`${i}-${asiento}`} value={asiento}>{asiento}</option>
+                                                    )}
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeRazon} class="form-control">
+                                                    <option value="razon">Razón</option>
+                                                    <option value="Ciudadano">Ciudadano</option>
+                                                    <option value="Residente">Residente</option>
+                                                    <option value="Turista">Turista</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select id={i} onChange={this.handleOnChangeDescuento} class="form-control">
+                                                    {this.state.optDescuento.map((descuento, i) => 
+                                                        <option key={`${i}-${descuento.label}`} value={descuento.desc}>{descuento.label}</option>
+                                                    )}
+                                                </select>
+                                            </td>
+                                            <td className="text-center"><Button name={client.nombre} className="btn-sm" color="danger" onClick={() => this.deletePasajero(client.nombre, i)}><i className="fa fa-trash-alt"/></Button></td>
+                                        </tr>)}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                    </div>
+                    :
+                    ''
+                }
+                {/* MODAL NUEVO CLIENTE */}
+                <Modal size="lg" isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Nuevo Cliente</ModalHeader>
+                    <WizardCliente toggle={this.toggle} refresh={this.actualizarListaClientes} usuario={generalData.vendedor.id_Usuario}></WizardCliente>
+                </Modal>
+                {/* FIN MODAL NUEVO CLIENTE */}
+            </div>
+        )
+    }
+}
+
+class SevenStep extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+          validationPago: true,
+          tipoDeCambio: 'US',
+          subtotal: null,
+          boletoIda: null,
+          boletoRegreso: null,
+          costoRegreso: null,
+          costoIda: null,
+          descuentoNeto: null,
+          total: null,
+          cambio: 0.00,
+          noAsientos: 0,
+          tipoDeViaje: 'Normal',
+          solicitud: false,
+          idSolicitud: '',
+          dollarDescuentoViajeRedondo: 0
+      };
+      this.handleOnChangeIdioma = this.handleOnChangeIdioma.bind(this);
+      this.handleClickActualizar = this.handleClickActualizar.bind(this);
+      this.handleOnChangePago = this.handleOnChangePago.bind(this);
+      this.handleOnChangeTipoDeCambio = this.handleOnChangeTipoDeCambio.bind(this);
+  }
+
+  handleOnChangeIdioma(e){
+      generalData.idioma = e.target.value;
+      generalDataR.idioma = e.target.value;
+  }
+
+  handleOnChangePago(e){
+      console.log(e.target.value);
+      this.setState({
+        pago: e.target.value
+      });
+
+      if(parseFloat(e.target.value) > parseFloat(this.state.total)){
+        this.setState({
+          cambio: (parseFloat(e.target.value) - parseFloat(this.state.total))
+        })
+      }else{
+        this.setState({
+          cambio: ''
+        })
+      }
+  }
+
+  handleClickActualizar(e){
+    let tipoDeCambio = e.target.value;
+    let exChangeRate = 'US';
+    if(tipoDeCambio == 'MX'){
+        exChangeRate = 'MX';
+    }
+    fetch(`/api/Precios/${generalData.origen.id}/${generalData.destino.id}/${generalDataR.origen.id}/${generalDataR.destino.id}/${generalData.noPasajeros}/${exChangeRate}`)
+        .then(res => res.json())
+        .then(data => {
+            descuentos = data.arrDescuento;
+
+            console.log(data.costoBoletoIda);
+            console.log(data.costoBoletoRegreso);
+
+            generalData.costoBoleto = data.costoBoletoIda;
+            generalDataR.costoBoleto = data.costoBoletoRegreso;
+
+
+            this.setState({
+                noAsientos: generalData.noPasajeros,
+                costoIda: data.ventaIda,
+                costoRegreso: data.ventaRegreso,
+                subtotal: data.subtotal,
+                descuentoNeto: data.descuentoNeto,
+                total: data.total,
+            });
+        })
+  }
+
+  handleOnChangeTipoDeCambio(e){
+      //Primero obtenemos el tipo de cambio seleccionado
+  }
+
+
+  render () {
+      return (
+          <div>
+              <Row>
+                  <Col md={{ size: 4}} lg={{ size: 4}} sm={12} xs={12}>
+                      <h3>Resumen de Venta </h3>
+                  </Col>
+                  <Col md={{ size: 4}} lg={{ size: 4}} sm={12} xs={12}>
+                      <Button onClick={this.handleClickActualizar} size="lg" outline color="info">Actualizar</Button>
+                  </Col>
+              </Row>
+              <Row>
+                  <Col>
+                      <h6>Total de Boletos: {this.state.noAsientos}</h6>
+                  </Col>
+              </Row>
+              <Row>
+                  <Col md={{ size: 6}} lg={{ size: 6}} sm={12} xs={12}>
+                      <Table bordered>
+                      <tbody>
+                          <tr>
+                          <th scope="row">Venta Ida</th>
+                          <td>{this.state.tipoDeCambio}{' $'}{this.state.costoIda}</td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Venta Regreso</th>
+                          <td>{this.state.tipoDeCambio}{' $'}{this.state.costoRegreso}</td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Subtotal</th>
+                          <td>{this.state.tipoDeCambio}{' $'}{this.state.subtotal}</td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Descuento</th>
+                          <td>{this.state.tipoDeCambio}{' $'}{this.state.descuentoNeto}</td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Total</th>
+                          <td>{this.state.tipoDeCambio}{' $'}{this.state.total}</td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Tipo de cambio</th>
+                          <td><CustomInput  type="radio" id="radioUS" name="radioTipoDeCambio" value="US" label="US" onChange={this.handleClickActualizar} defaultChecked inline />
+                              <CustomInput type="radio" id="radioMX" name="radioTipoDeCambio" value="MX" label="MX" onChange={this.handleClickActualizar} inline /></td>
+                          </tr>
+                          <tr>
+                          <th scope="row">Impresion de Boleto</th>
+                          <td><CustomInput  type="radio" id="radioEs" name="radioIdioma" value="espanol" label="Español" onChange={this.handleOnChangeIdioma} defaultChecked inline />
+                              <CustomInput type="radio" id="radioIn" name="radioIdioma" value="ingles" label="Inglés" onChange={this.handleOnChangeIdioma} inline /></td>
+                          </tr>
+                      </tbody>
+                      </Table>
+                      <br/>
+                      <Row>
+                          <Col lg={12} md={12} sm={12} xs={12}>
+                              <FormGroup>
+                              <Label for="inputPago">Pago</Label>
+                              <div class={(this.state.validationPago) ? 'card border-light': 'card border-danger'}>
+                                  <input type="text" class="form-control" name="inputPago" id="inputPago" placeholder="$0.0" onChange={this.handleOnChangePago}></input>
+                              </div>
+                              <p class={(this.state.validationPago) ? 'textValid': 'textInvalid'}>Introduce correctamente el pago</p>
+                              </FormGroup>
+                          </Col>
+                      </Row>
+                      <Row>
+                          <Col lg={12} md={12} sm={12} xs={12}>
+                              <FormGroup>
+                              <Label for="inputCambio">Cambio</Label>
+                              <Input plaintext value={this.state.cambio} type="text" name="inputCambio" id="inputCambio" placeholder="$0.0" readOnly />
+                              </FormGroup>
+                          </Col>
+                      </Row>
+                  </Col>
+              </Row>
+          </div>
+      )
+  }
+}
+
+var steps = [
+    // this step hasn't got a isValidated() function, so it will be considered to be true
+    { 
+      stepName: "Datos de viaje Ida", 
+      stepIcon: "fas fa-map-marker-alt",
+      component: FirstStep 
+    },
+    // this step will be validated to false
+    { 
+      stepName: "No. de Asientos Ida", 
+      stepIcon: "fas fa-bus",
+      component: SecondStep 
+    },
+    // this step will never be reachable because of the seconds isValidated() steps function that will always return false
+    {
+      stepName: "Informacion de pasajeros Ida", 
+      stepIcon: "fas fa-users",
+      component: ThirdStep 
+    },
+    {
+      stepName: "Datos de viaje Regreso", 
+      stepIcon: "fas fa-map-marker-alt",
+      component: FourthStep 
+    },
+    {
+      stepName: "No. de Asientos Regreso", 
+      stepIcon: "fas fa-bus",
+      component: FiveStep 
+    },
+    {
+      stepName: "Informacion de pasajeros Regreso", 
+      stepIcon: "fas fa-users",
+      component: SixStep 
+    },
+    {
+      stepName: "Resumen y cobro", 
+      stepIcon: "fas fa-clipboard-check",
+      component: SevenStep 
+    }
+];
+
+
+export default class viajeRedondo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            IrCorte: false,
+            modal: false
+        };
+        this.finishButtonClick = this.finishButtonClick.bind(this);
+        this.fetchSucursales = this.fetchSucursales.bind(this);
+        this.fetchPoliticasFrasePermiso = this.fetchPoliticasFrasePermiso.bind(this);
+        this.fetchImagen = this.fetchImagen.bind(this);
+
+        this.toggle = this.toggle.bind(this);
+        this.reLoad = this.reLoad.bind(this);
+
+        generalData.vendedor.username = this.props.match.params.id_Usuario;
+        generalDataR.vendedor.username = this.props.match.params.id_Usuario;
+    }
+
+    componentDidMount(){
+        generalData = {
+            folio: null,
+            costoBoleto: 0, //Precio en Dollar
+            precioDollar: 0, 
+            idioma: 'espanol',
+            noAsientos: 0,
+            asientosSelected: {
+                selected1: false,
+                selected2: false,
+                selected3: false,
+                selected4: false,
+                selected5: false,
+                selected6: false,
+                selected7: false,
+                selected8: false,
+                selected9: false,
+                selected10: false,
+                selected11: false,
+                selected12: false,
+                selected13: false,
+                selected14: false,
+                selected15: false,
+                selected16: false,
+                selected17: false,
+                selected18: false,
+                selected19: false,
+                selected20: false,
+                selected21: false,
+                selected22: false,
+                selected23: false,
+                selected24: false,
+                selected25: false,
+                selected26: false,
+                selected27: false,
+                selected28: false,
+                selected29: false,
+                selected30: false,
+                selected31: false,
+                selected32: false,
+                selected33: false,
+                selected34: false,
+                selected35: false,
+                selected36: false,
+                selected37: false,
+                selected38: false,
+                selected39: false,
+                selected40: false,
+                selected41: false,
+                selected42: false,
+            },
+            origen: {
+                id: null,
+                direccion: null,
+                ciudad: null,
+                estado: null,
+                pais: null
+            },
+            destino: {
+                id: null,
+                direccion: null,
+                ciudad: null,
+                estado: null,
+                pais: null
+            },
+            //fechahora: null,
+            cliente: null,
+            nombreCliente: null,
+            clienteTipo: null,
+            razon: null,
+            cambio: 'US',
+            //total: '100',
+            descuento: {
+                idDescuento: null,
+                tipo: 'Ninguno',
+                porc: 0
+            },
+            cobro: {
+                subtotal: 0,
+                descuento: 0,
+                cortesia: 0,
+                iva: 0,
+                total: 0
+            },
+            detalles:{
+                fechaAbierta: false,
+                dia: null,
+                hora: '04:15',
+                anio: null,
+                diaDelAnio:  null,
+                idViaje: null,
+                numeroEconomico: null,
+                noAsiento: null
+            },
+            vendedor:{
+                id_Usuario: null,
+                username: this.props.match.params.id_Usuario,
+                nombre: null,
+                apellidoPaterno: null,
+                apellidoMaterno: null,
+                sucursal: null,
+                tipoDescuento: null
+            },
+            sucursalVendedor: {
+                nombre: null,
+                direccion: null,
+                tel: null,
+                tel2: null,
+                correo: null
+            },
+            noPasajeros: 0,
+        };
+        this.fetchSucursales('MX');
+        this.fetchSucursales('US');
+        this.fetchPoliticasFrasePermiso();
+        this.fetchImagen();
+    }
+
+    fetchSucursales(pais){
+        let direccion = '';
+        let telefono = '';
+        fetch(`/api/Sucursales/${pais}/matriz`)
+          .then(res => res.json())
+          .then(data => {
+              direccion = data[0].direccion+" "+data[0].ciudad+", "+data[0].estado+", "+data[0].pais;
+              telefono =  data[0].telefono_1+"\n"+data[0].telefono_2;
+              if(pais == 'MX'){
+                this.setState({
+                  direccionMatriz: direccion,
+                  telefonoMatriz: telefono
+                });
+              }else{
+                this.setState({
+                  direccionMatrizEU: direccion,
+                  telefonoMatrizEU: telefono
+                });
+              }
+          });  
+    }
+
+    fetchImagen(){
+        fetch(`/api/ImagenesBoletos/Boleto`)
+          .then(res => res.json())
+          .then(data => {
+            if(data.length>0){
+              //ConfiguracionDePublicidad.jsconsole.log('imagenesBoletos', data);
+              this.setState({
+                imagenPublicidad: data[0].imagen
+              });
+            }
+        });
+    }
+
+    fetchPoliticasFrasePermiso(){
+        fetch(`/api/ConfiguracionBoleto`)
+          .then(res => res.json())
+          .then(data => {
+            if(data.length>0){
+              //console.log(data);
+              this.setState({
+                frase: data[0].frase,
+                permiso: data[0].informacionPermiso,
+                politicas: data[0].politicas
+              });
+            }
+        });
+    }
+
+    finishButtonClick() {
+        console.log(`/api/Usuarios/${generalData.vendedor.id_Usuario}/actualizaYobtenFolioViajeRedondo`);
+        console.log('pasajeros',pasajeros);
+        
+        console.log('razones',razones);
+        
+        console.log('descuentos',descuentos);
+        console.log('generalData', generalData);
+        fetch(`/api/Usuarios/${generalData.vendedor.id_Usuario}/actualizaYobtenFolioViajeRedondo`, {
+            method: 'PUT',
+            body: JSON.stringify({pasajeros, razones, descuentos, generalData}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+            let datos = {};
+            for (let i = 0; i < data.rJson.length; i++) {
+                datos = {
+                    'correoSucursal': generalData.sucursalVendedor.correo,
+                    'descuento': descuentos[i],
+                    'destino': generalData.destino.direccion+' '+generalData.destino.ciudad+' '+generalData.destino.estado+' '+generalData.destino.pais,
+                    'dirSucursal': generalData.sucursalVendedor.direccion,
+                    'direccionMatriz': this.state.direccionMatriz,
+                    'direccionMatrizEU': this.state.direccionMatrizEU,
+                    'fecha': generalData.detalles.dia,
+                    'folio': data.rJson[i],
+                    'frase': this.state.frase,
+                    'hora': generalData.detalles.hora,
+                    'idioma': generalData.idioma,
+                    'imagenPublicidad': this.state.imagenPublicidad,
+                    'noAsiento': pasajeros[i].asiento,
+                    'origen': generalData.origen.direccion+' '+generalData.origen.ciudad+' '+generalData.origen.estado+' '+generalData.origen.pais,
+                    'pasajero': pasajeros[i].nombre,
+                    'permiso': this.state.permiso,
+                    'politicas': this.state.politicas,
+                    'subtotal': generalData.costoBoleto,
+                    'sucursal': generalData.sucursalVendedor.nombre,
+                    'tel2Sucursal': generalData.sucursalVendedor.tel2,
+                    'telSucursal': generalData.sucursalVendedor.tel,
+                    'telefonoMatriz': this.state.telefonoMatriz,
+                    'telefonoMatrizEU': this.state.telefonoMatrizEU,
+                    'tipo': razones[i].razon,
+                    'tipoDeCambio':generalData.cambio,
+                    'total': parseFloat(generalData.costoBoleto)-(parseFloat(descuentos[i])/2),
+                    'vendedor': generalData.vendedor.nombre
+                };
+                //console.log(datos);
+                GenerarBoleto(datos);
+            }            
+        })
+        .then(()=>{
+            
+            let idUsuario = generalData.vendedor.id_Usuario;
+            pasajeros = pasajerosR;
+            razones = razonesR;
+            generalData = generalDataR;
+            console.log('dataR', `/api/Usuarios/${generalData.vendedor.id_Usuario}/actualizaYobtenFolioViajeRedondo`);
+            console.log('pasajeros',pasajeros);
+            console.log('razones',razones);
+            console.log('generalData',generalData);
+            fetch(`/api/Usuarios/${idUsuario}/actualizaYobtenFolioViajeRedondo`, {
+                method: 'PUT',
+                body: JSON.stringify({pasajeros, razones, descuentos, generalData}),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                let datosR = {};
+                for (let i = 0; i < data.rJson.length; i++) {
+                    datosR = {
+                        'correoSucursal': generalDataR.sucursalVendedor.correo,
+                        'descuento': descuentos[i],
+                        'destino': generalDataR.destino.direccion+' '+generalDataR.destino.ciudad+' '+generalDataR.destino.estado+' '+generalDataR.destino.pais,
+                        'dirSucursal': generalDataR.sucursalVendedor.direccion,
+                        'direccionMatriz': this.state.direccionMatriz,
+                        'direccionMatrizEU': this.state.direccionMatrizEU,
+                        'fecha': generalDataR.detalles.dia,
+                        'folio': data.rJson[i],
+                        'frase': this.state.frase,
+                        'hora': generalDataR.detalles.hora,
+                        'idioma': generalDataR.idioma,
+                        'imagenPublicidad': this.state.imagenPublicidad,
+                        'noAsiento': pasajerosR[i].asiento,
+                        'origen': generalDataR.origen.direccion+' '+generalDataR.origen.ciudad+' '+generalDataR.origen.estado+' '+generalDataR.origen.pais,
+                        'pasajero': pasajerosR[i].nombre,
+                        'permiso': this.state.permiso,
+                        'politicas': this.state.politicas,
+                        'subtotal': generalDataR.costoBoleto,
+                        'sucursal': generalDataR.sucursalVendedor.nombre,
+                        'tel2Sucursal': generalDataR.sucursalVendedor.tel2,
+                        'telSucursal': generalDataR.sucursalVendedor.tel,
+                        'telefonoMatriz': this.state.telefonoMatriz,
+                        'telefonoMatrizEU': this.state.telefonoMatrizEU,
+                        'tipo': razonesR[i].razon,
+                        'tipoDeCambio':generalDataR.cambio,
+                        'total': parseFloat(generalDataR.costoBoleto)-(parseFloat(descuentos[i])/2),
+                        'vendedor': generalDataR.vendedor.nombre
+                    };
+                    GenerarBoleto(datosR);
+                }
+            })
+        })
+        .then(()=>{
+            this.setState({
+                modal: true
+            })
+        })
+        .catch(err =>{
+            this.setState({
+                modal: true
+            });
+            console.log(err);
+        });
+    }
+
+    reLoad(){
+        this.setState({
+            IrCorte: true
+        });
+    }
+
+    toggle(){
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }));
+    }
+
+    render() {
+
+        if(this.state.IrCorte && (generalData.vendedor.seguridad == 'Admin')){return <Redirect to= {"/Corte/"+generalData.vendedor.username}/>};
+        if(this.state.IrCorte && (generalData.vendedor.seguridad == 'Matriz')){return <Redirect to= {"/Matriz_Corte/"+generalData.vendedor.username}/>};
+        if(this.state.IrCorte && (generalData.vendedor.seguridad == 'Ventas')){return <Redirect to= {"/Ventas_Corte/"+generalData.vendedor.username}/>};
+        if(this.state.IrCorte && (generalData.vendedor.seguridad == 'Viajes')){return <Redirect to= {"/Viajes_Corte/"+generalData.vendedor.username}/>};
+
+        return (
+            <div>
+                <Container fluid style={{ marginTop: "15px" }}>
+                    <Row>
+                        <Col xs={12} md={12} className="mr-auto ml-auto">
+                            <ReactWizard
+                                steps={steps}
+                                navSteps
+                                title="VENTA DE BOLETOS VIAJE REDONDO"
+                                description=""
+                                headerTextCenter
+                                validate
+                                color="green"
+                                finishButtonClick={this.finishButtonClick}
+                            />
+                        </Col>
+                    </Row>
+                    <Modal isOpen={this.state.modal} toggle={this.toggle} backdrop={'static'}>
+                        <ModalHeader>Venta generada</ModalHeader>
+                        <ModalBody>
+                            Tu Venta han sido generada, por favor verifica los datos en los boletos
+                        </ModalBody>
+                        <ModalFooter>
+                        <Button color="primary" onClick={this.reLoad}>Aceptar</Button>
+                        </ModalFooter>
+                    </Modal>
+                </Container>
+            </div>
+        );
+    }
+}

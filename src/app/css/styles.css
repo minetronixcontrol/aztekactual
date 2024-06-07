@@ -1,0 +1,46 @@
+.dot {
+    height: 15px;
+    width: 15px;    
+    border-radius: 50%;
+    display: inline-block;
+}
+.nino {
+    background-color: #FF7F70
+}
+.adultoM{
+    background-color: #A466E8
+}
+.adulto{
+    background-color: #4C76FF
+}
+.botonMorado{
+    background-color: BLUEVIOLET;
+}
+.US{
+    background-color: #FF7F70
+}
+.MX{
+    background-color: DeepSkyBlue;
+}
+.desactivado{
+    background-color: #FF7F70
+}
+.guion{
+    padding-top: 30px;
+}
+.guionca{
+    padding-top: 32px;
+}
+.folioca{
+    display: inline;
+}
+.activo{
+    display: block;
+}
+.noactivo{
+    display: none;
+}
+
+.btn-imprimir{
+    padding-top: 32px;
+}
