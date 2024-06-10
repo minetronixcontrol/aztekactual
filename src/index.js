@@ -5,7 +5,9 @@ const path = require('path');   //modulo de nodejs que automatiza el manejo de d
 const morgan = require('morgan');// es una dependencia que permite monitorear las peticiones del servidor 
                                   // 
 const express = require('express'); //constante de requerimiento de express 
-const app = express();  //constante que manda llamar a la funcion express
+const app = express(); 
+const router = express.Router();
+ //constante que manda llamar a la funcion express
 /************************************************************************
  * ********************* CONFIGURACIÓN DEL SERVIDOR ***********************
  * **********************************************************************
@@ -36,6 +38,7 @@ app.use('/api/DescuentosNuevo', require('./routes/DescuentosNuevo.routes'));
 app.use('/api/Descuentos', require('./routes/Descuentos.routes'));
 app.use('/api/DescuentoFamiliar', require('./routes/DescuentoFamiliar.routes'));
 app.use('/api/Dollar', require('./routes/Dollar.routes'));
+app.use('/api/FindQuery', require('./routes/find.query'));
 app.use('/api/ImagenesBoletos', require('./routes/ImagenesBoletos.routes'));
 app.use('/api/ListaDeAbordaje', require('./routes/ListaDeAbordaje.routes'));
 app.use('/api/ListaNegra', require('./routes/ListaNegra.routes'));
@@ -69,3 +72,4 @@ const server = app.listen (app.get('port'), () => {
 //io.on ('connection', (socket) => {  //funcion que invoca la constante socket del frontend
  //   console.log('new conection', socket.id);// muestra en pantalla cuando se ha conectado alguien y el id del socket de conexion
   //  });
+  module.exports = app ;

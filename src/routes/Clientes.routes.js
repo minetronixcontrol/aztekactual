@@ -172,9 +172,13 @@ router.get('/:nombre/:apaterno/:amaterno', async (req, res) =>{
 
         let clientes = [];
 
-        let rNombre = req.params.nombre;
-        let rApaterno = regApaterno = req.params.apaterno;
-        let rAmaterno = regAmaterno = req.params.amaterno;
+        let Nombre = req.params.nombre;
+        let Apaterno = regApaterno = req.params.apaterno;
+        let Amaterno = rAmaterno = req.params.amaterno;
+        let regularName = `^${Nombre}.*`
+        let rNombre = new RegExp(regularName, "i");
+        let regularApaterno = `^${Apaterno}.*`
+        let rApaterno = new RegExp(regularApaterno, "i");
 
         if(req.params.nombre != 'null' && req.params.apaterno != 'null' && req.params.amaterno != 'null'){
             clientes = await Cliente.find({nombre: rNombre, apellidoPaterno: rApaterno, apellidoMaterno: rAmaterno});

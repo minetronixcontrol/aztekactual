@@ -72,7 +72,7 @@ export default class Clientes extends Component {
 
     fetchClientes(field, id){
         if(field == 'ultimosRegistrosAdmin'){
-            fetch(`/api/Clientes/10/ultimosRegistrosAdmin`)
+            fetch(`/api/FindQuery/10`)
             .then(res => res.json())
             .then(data => {
                 if(data.length > 0){
@@ -84,7 +84,7 @@ export default class Clientes extends Component {
                 });
             });
         }else if(field == 'ultimosRegistros'){
-            fetch(`/api/Clientes/${id}/ultimosRegistros`)
+            fetch(`/api/FindQuery/10`)
             .then(res => res.json())
             .then(data => {
                 if(data.length > 0){
@@ -106,7 +106,7 @@ export default class Clientes extends Component {
     
             if(nombreBusqueda != '' && nombreBusqueda != null){
                 nom = nombreBusqueda
-            }
+            } 
     
             if(apaternoBusqueda != '' && apaternoBusqueda != null){
                 ap = apaternoBusqueda
@@ -115,21 +115,43 @@ export default class Clientes extends Component {
             if(amaternoBusqueda != '' && amaternoBusqueda != null){
                 am = amaternoBusqueda
             }
+            let controlCase = 'null';
+
+            if( nom == 'null' && ap != 'null' ){
+                controlCase = 'soloApellido';
+            }
+
+            if( nom != 'null' && ap == 'null' ){
+                controlCase = 'soloNombre';
+            }
+            if( nom != 'null' && ap != 'null' ){
+                controlCase = 'nombreApellido';
+            }
+
+
 
             if(this.state.userType == 'Admin'){
-                fetch(`/api/Clientes/${nom}/${ap}/${am}/clientes`)
+                fetch(`/api/FindQuery/${nom}/${ap}/${controlCase}/0/100000`)
+ //               fetch(`/api/Clientes/${nom}/${ap}/${am}/clientes`)
                 .then(res => res.json())
                 .then(data => {
+                    if(data.length > 0){
+                        clientes = data;
+                    }
                     this.setState({
-                        clientes: data
+                        
+                        clientes: clientes
                     })
                 })
             }else{
                 fetch(`/api/Clientes/${nom}/${ap}/${am}/${this.state.idUsuario}`)
                 .then(res => res.json())
                 .then(data => {
+                    if(data.length > 0){
+                        clientes = data;
+                    }
                     this.setState({
-                        clientes: data
+                        clientes: clientes
                     })
                 })
             }
